@@ -12,10 +12,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.use(bodyParser.json({ limit: '10mb' }));
   app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+  app.enableCors();
 
   const options = new DocumentBuilder()
-    .setTitle('Goobike API')
-    .setDescription('The Goobike API description')
+    .setTitle('GooTax API')
+    .setDescription('The GooTax API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

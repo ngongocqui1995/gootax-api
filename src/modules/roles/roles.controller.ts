@@ -17,19 +17,19 @@ import {
   ParsedBody,
   ParsedRequest,
 } from '@nestjsx/crud';
-import { RolesService } from './roles.service';
-import { Role } from './entities/role.entity';
-import { BaseController } from '../../common/base.controller';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
 import { I18nLang } from 'nestjs-i18n';
-import { UsersService } from '../users/users.service';
-import { ENUM_MODEL, ENUM_STATUS } from 'src/common';
+import { RequireRoles } from 'src/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles-guard';
-import { ROLES } from './contants/contants';
-import { RequireRoles } from 'src/auth/decorator/roles.decorator';
+import { ENUM_MODEL, ENUM_STATUS } from 'src/common';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
+import { BaseController } from '../../common/base.controller';
+import { UsersService } from '../users/users.service';
+import { ROLES } from './contants/contants';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
+import { Role } from './entities/role.entity';
+import { RolesService } from './roles.service';
 
 @ApiTags('Roles')
 @Crud({

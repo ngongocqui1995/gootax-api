@@ -1,15 +1,14 @@
 import {
-  Controller,
-  Put,
-  ValidationPipe,
   Body,
+  Controller,
   Param,
-  UseGuards,
-  Request,
   Post,
+  Put,
+  Request,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiParam, ApiResponse, ApiHeader } from '@nestjs/swagger';
-import { UsersService } from './users.service';
+import { ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   Crud,
   CrudController,
@@ -18,21 +17,21 @@ import {
   ParsedBody,
   ParsedRequest,
 } from '@nestjsx/crud';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { BaseController } from '../../common/base.controller';
 import { I18nLang } from 'nestjs-i18n';
-import { ENUM_MODEL } from 'src/common';
 import { RequireRoles } from 'src/auth/decorator/roles.decorator';
-import { ROLES } from '../roles/contants/contants';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles-guard';
+import { ENUM_MODEL } from 'src/common';
+import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
+import { BaseController } from '../../common/base.controller';
+import { ROLES } from '../roles/contants/contants';
+import { ChangePasswordCustomerDTO } from './dto/change-password-customer.dto';
 import { ChangePasswordDTO } from './dto/change-password.dto';
 import { CreateCustomerDto } from './dto/create-cutomer.dto';
-import { request } from 'http';
-import { ChangePasswordCustomerDTO } from './dto/change-password-customer.dto';
-import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @Crud({
   model: {
