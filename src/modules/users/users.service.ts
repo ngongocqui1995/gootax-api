@@ -23,6 +23,7 @@ import { PasswordHasherService } from '../../auth/password-hasher/password-hashe
 import { BaseService } from '../../common/base.service';
 import { ROLES } from '../roles/contants/contants';
 import { RolesService } from '../roles/roles.service';
+import { ChangePasswordCustomerDTO } from './dto/change-password-customer.dto';
 import { ChangePasswordDTO } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -268,6 +269,47 @@ export class UsersService extends TypeOrmCrudService<User> {
         .update(User)
         .set({ password: encryptedPassword })
         .where('id = :id', { id: req.user.id })
+        .execute();
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.checkService.throwErrorSystem(err.message);
+    } finally {
+      await queryRunner.release();
+    }
+    return {
+      status: HttpStatus.OK,
+      message: await this.checkService.i18n.translate(
+        'messages.RESET_PASSWORD.PASSWORD_CHANGED',
+      ),
+    };
+  }
+
+  async emailChangePassword(
+    @Request() req,
+    changePasswordDTO: ChangePasswordCustomerDTO,
+    @I18nLang() lang: string,
+  ) {
+    // verify user password
+    this.checkService.comparePassword(
+      changePasswordDTO.new_password,
+      changePasswordDTO.confirm_password,
+    );
+
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const encryptedPassword = this.hashService.hashPassword(
+        changePasswordDTO.new_password,
+      );
+
+      await queryRunner.manager
+        .createQueryBuilder()
+        .update(User)
+        .set({ password: encryptedPassword })
+        .where('id = :id', { id: changePasswordDTO.user })
         .execute();
 
       await queryRunner.commitTransaction();

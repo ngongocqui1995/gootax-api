@@ -14,8 +14,8 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
+import { ChangePasswordCustomerDTO } from '../users/dto/change-password-customer.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
-import { User } from '../users/entities/user.entity';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
@@ -121,10 +121,9 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
     const encryptedPassword = this.hashService.hashPassword(dto.password);
     const [err] = await to(
-      this.createOne(req, <User>{
+      this.createOne(req, <Customer>{
         ...dto,
         password: encryptedPassword,
-        price: 0,
       }),
     );
     if (err) this.checkService.throwErrorSystem(err.message);
@@ -159,7 +158,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
     try {
       await queryRunner.manager
         .createQueryBuilder()
-        .update(User)
+        .update(Customer)
         .set({ status: updateStatusDTO.status })
         .where('id = :id', { id })
         .execute();
@@ -217,9 +216,50 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
       await queryRunner.manager
         .createQueryBuilder()
-        .update(User)
+        .update(Customer)
         .set({ password: encryptedPassword })
         .where('id = :id', { id: req.user.id })
+        .execute();
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.checkService.throwErrorSystem(err.message);
+    } finally {
+      await queryRunner.release();
+    }
+    return {
+      status: HttpStatus.OK,
+      message: await this.checkService.i18n.translate(
+        'messages.RESET_PASSWORD.PASSWORD_CHANGED',
+      ),
+    };
+  }
+
+  async emailChangePassword(
+    @Request() req,
+    changePasswordDTO: ChangePasswordCustomerDTO,
+    @I18nLang() lang: string,
+  ) {
+    // verify user password
+    this.checkService.comparePassword(
+      changePasswordDTO.new_password,
+      changePasswordDTO.confirm_password,
+    );
+
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const encryptedPassword = this.hashService.hashPassword(
+        changePasswordDTO.new_password,
+      );
+
+      await queryRunner.manager
+        .createQueryBuilder()
+        .update(Customer)
+        .set({ password: encryptedPassword })
+        .where('id = :id', { id: changePasswordDTO.user })
         .execute();
 
       await queryRunner.commitTransaction();

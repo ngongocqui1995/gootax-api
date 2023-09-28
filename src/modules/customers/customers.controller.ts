@@ -24,6 +24,7 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseController } from 'src/common/base.controller';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { ROLES } from '../roles/contants/contants';
+import { ChangePasswordCustomerDTO } from '../users/dto/change-password-customer.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -170,5 +171,20 @@ export class CustomersController implements CrudController<Customer> {
     @I18nLang() lang: string,
   ) {
     return this.service.changePassword(req, changePasswordDTO, lang);
+  }
+
+  @Put('update-email/change-password')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @RequireRoles(ROLES.ROLE_ADMIN)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer {{token}}',
+  })
+  async emailChangePassword(
+    @Request() req,
+    @Body(ValidationPipe) changePasswordDTO: ChangePasswordCustomerDTO,
+    @I18nLang() lang: string,
+  ) {
+    return this.service.emailChangePassword(req, changePasswordDTO, lang);
   }
 }
