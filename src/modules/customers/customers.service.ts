@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Param,
-  Request,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, Param, Request } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CrudRequest,
@@ -16,49 +9,38 @@ import {
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
+import { PasswordHasherService } from 'src/auth/password-hasher/password-hasher.service';
 import { ENUM_MODEL } from 'src/common';
+import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
-import { PasswordHasherService } from '../../auth/password-hasher/password-hasher.service';
-import { BaseService } from '../../common/base.service';
-import { ROLES } from '../roles/contants/contants';
-import { RolesService } from '../roles/roles.service';
-import { ChangePasswordDTO } from './dto/change-password.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { ChangePasswordDTO } from '../users/dto/change-password.dto';
+import { User } from '../users/entities/user.entity';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { Customer } from './entities/customer.entity';
 
 @Injectable()
-export class UsersService extends TypeOrmCrudService<User> {
-  model_name: string = ENUM_MODEL.USER;
+export class CustomersService extends TypeOrmCrudService<Customer> {
+  model_name: string = ENUM_MODEL.CUSTOMER;
   status_name: string = ENUM_MODEL.STATUS;
 
   constructor(
-    @InjectRepository(User) repo,
+    @InjectRepository(Customer) repo,
     private checkService: BaseService,
     private hashService: PasswordHasherService,
     private connection: Connection,
-    @Inject(forwardRef(() => RolesService))
-    private rolesService: RolesService,
   ) {
     super(repo);
   }
 
-  get base(): CrudService<User> {
+  get base(): CrudService<Customer> {
     return this;
   }
 
-  async getManyBase(@ParsedRequest() req: CrudRequest, @Request() request) {
+  async getManyBase(@ParsedRequest() req: CrudRequest) {
     const { parsed, options } = req;
-    const user: User = request.user;
     const builder = await this.createBuilder(parsed, options);
-
-    switch (user.role.code) {
-      case ROLES.ROLE_ADMIN: {
-        builder.andWhere(`"role"."code" != :code`, { code: ROLES.ROLE_ROOT });
-        break;
-      }
-    }
 
     return await this.doGetMany(builder, parsed, options);
   }
@@ -66,26 +48,16 @@ export class UsersService extends TypeOrmCrudService<User> {
   async replaceOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateUserDto,
+    @ParsedBody() dto: CreateCustomerDto,
     @I18nLang() lang: string,
   ) {
-    const emailExist = await this.findOne({
-      where: { email: dto.email, id: Not(id) },
-    });
-    this.checkService.checkEmailExist(!!emailExist);
-
     const phoneExist = await this.findOne({
       where: { phone: dto.phone, id: Not(id) },
     });
     this.checkService.checkPhoneExist(!!phoneExist);
 
-    const roleExist = await this.rolesService.findOne({
-      where: { id: dto.role.toString() },
-    });
-    this.checkService.checkRoleNotExist(!!roleExist);
-
     delete dto.password;
-    const [err] = await to(this.replaceOne(req, <User>dto));
+    const [err] = await to(this.replaceOne(req, <Customer>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -108,26 +80,16 @@ export class UsersService extends TypeOrmCrudService<User> {
   async updateOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: UpdateUserDto,
+    @ParsedBody() dto: UpdateCustomerDto,
     @I18nLang() lang: string,
   ) {
-    const emailExist = await this.findOne({
-      where: { email: dto.email, id: Not(id) },
-    });
-    this.checkService.checkEmailExist(!!emailExist);
-
     const phoneExist = await this.findOne({
       where: { phone: dto.phone, id: Not(id) },
     });
     this.checkService.checkPhoneExist(!!phoneExist);
 
-    const roleExist = await this.rolesService.findOne({
-      where: { id: dto.role.toString() },
-    });
-    this.checkService.checkRoleNotExist(!!roleExist);
-
     delete dto.password;
-    const [err] = await to(this.updateOne(req, <User>dto));
+    const [err] = await to(this.updateOne(req, <Customer>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -149,23 +111,13 @@ export class UsersService extends TypeOrmCrudService<User> {
 
   async createOneBase(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateUserDto,
+    @ParsedBody() dto: CreateCustomerDto,
     @I18nLang() lang: string,
   ) {
-    const emailExist = await this.findOne({
-      where: { email: dto.email },
-    });
-    this.checkService.checkEmailExist(!!emailExist);
-
     const phoneExist = await this.findOne({
       where: { phone: dto.phone },
     });
     this.checkService.checkPhoneExist(!!phoneExist);
-
-    const roleExist = await this.rolesService.findOne({
-      where: { id: dto.role.toString() },
-    });
-    this.checkService.checkRoleNotExist(!!roleExist);
 
     const encryptedPassword = this.hashService.hashPassword(dto.password);
     const [err] = await to(

@@ -1,5 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { CrudValidationGroups } from '@nestjsx/crud';
+import { Transform } from 'class-transformer';
 import {
-  IsEmail,
   IsIn,
   IsNotEmpty,
   IsOptional,
@@ -7,26 +9,10 @@ import {
   Length,
   Matches,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { CrudValidationGroups } from '@nestjsx/crud';
 
 const { UPDATE, CREATE } = CrudValidationGroups;
 
 export class CreateCustomerDto {
-  @IsString({ message: 'errors.EMAIL_STRING' })
-  @IsNotEmpty({ message: 'errors.EMAIL_NOT_EMPTY' })
-  @IsEmail({}, { message: 'errors.EMAIL_NOT_VALID' })
-  @Length(5, 100, { message: 'errors.EMAIL_LENGTH_5_100' })
-  @ApiProperty({
-    type: String,
-    minLength: 5,
-    maxLength: 100,
-    required: true,
-    description: 'Email',
-    example: 'abc@gmail.com',
-  })
-  email: string;
-
   @IsOptional({ groups: [UPDATE] })
   @IsString({ message: 'errors.PASSWORD_STRING' })
   @IsNotEmpty({ message: 'errors.PASSWORD_NOT_EMPTY' })
@@ -71,6 +57,7 @@ export class CreateCustomerDto {
   @IsString({ message: 'errors.PHONE_STRING' })
   @IsNotEmpty({ message: 'errors.PHONE_NOT_EMPTY' })
   @Length(10, 10, { message: 'errors.PHONE_LENGTH_5_50' })
+  @Transform((params) => String(params.value).trim())
   @ApiProperty({
     type: String,
     minLength: 10,

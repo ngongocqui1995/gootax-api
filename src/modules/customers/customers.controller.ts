@@ -21,22 +21,22 @@ import { RequireRoles } from 'src/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles-guard';
 import { ENUM_MODEL } from 'src/common';
+import { BaseController } from 'src/common/base.controller';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
-import { BaseController } from '../../common/base.controller';
 import { ROLES } from '../roles/contants/contants';
-import { ChangePasswordDTO } from './dto/change-password.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { UsersService } from './users.service';
+import { ChangePasswordDTO } from '../users/dto/change-password.dto';
+import { CustomersService } from './customers.service';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { Customer } from './entities/customer.entity';
 
 @Crud({
   model: {
-    type: User,
+    type: Customer,
   },
   dto: {
-    create: CreateUserDto,
-    update: UpdateUserDto,
+    create: CreateCustomerDto,
+    update: UpdateCustomerDto,
   },
   query: {
     join: {
@@ -57,25 +57,25 @@ import { UsersService } from './users.service';
     },
   },
 })
-@ApiTags('Users')
-@Controller('users')
-export class UsersController implements CrudController<User> {
-  model_name: string = ENUM_MODEL.USER;
+@ApiTags('Customers')
+@Controller('customers')
+export class CustomersController implements CrudController<Customer> {
+  model_name: string = ENUM_MODEL.CUSTOMER;
 
   constructor(
-    public service: UsersService,
+    public service: CustomersService,
     private checkController: BaseController,
   ) {}
 
-  get base(): CrudController<User> {
+  get base(): CrudController<Customer> {
     return this;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @RequireRoles(ROLES.ROLE_ADMIN)
   @Override()
-  getMany(@ParsedRequest() req, @Request() request) {
-    return this.service.getManyBase(req, request);
+  getMany(@ParsedRequest() req) {
+    return this.service.getManyBase(req);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -95,7 +95,7 @@ export class UsersController implements CrudController<User> {
   coolFunction(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateUserDto,
+    @ParsedBody() dto: CreateCustomerDto,
     @I18nLang() lang: string,
   ) {
     return this.service.updateOneBase(id, req, dto, lang);
@@ -111,7 +111,7 @@ export class UsersController implements CrudController<User> {
   awesomePUT(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateUserDto,
+    @ParsedBody() dto: CreateCustomerDto,
     @I18nLang() lang: string,
   ) {
     return this.service.replaceOneBase(id, req, dto, lang);
@@ -126,7 +126,7 @@ export class UsersController implements CrudController<User> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateUserDto,
+    @ParsedBody() dto: CreateCustomerDto,
     @I18nLang() lang: string,
   ) {
     return this.service.createOneBase(req, dto, lang);

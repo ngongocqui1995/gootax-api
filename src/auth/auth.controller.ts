@@ -1,18 +1,19 @@
 import {
+  Body,
   Controller,
   Get,
   Post,
-  Body,
-  UseGuards,
   Request,
+  UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { ApiHeader, ApiTags } from '@nestjs/swagger';
-import { LoginUserDto } from 'src/modules/users/dto/login-user.dto';
 import { I18nLang } from 'nestjs-i18n';
-import { LoginRsp } from 'src/modules/users/interfaces/user';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ENUM_MODEL } from 'src/common';
+import { LoginCustomerDto } from 'src/modules/customers/dto/login-customer.dto';
+import { LoginUserDto } from 'src/modules/users/dto/login-user.dto';
+import { LoginRsp } from 'src/modules/users/interfaces/user';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -36,6 +37,24 @@ export class AuthController {
     description: 'Bearer {{token}}',
   })
   async profile(@Request() req) {
+    return req.user;
+  }
+
+  @Post('customer-login')
+  async customterLogin(
+    @Body() user: LoginCustomerDto,
+    @I18nLang() lang: string,
+  ): Promise<LoginRsp> {
+    return await this.authService.customerLogin(user, lang);
+  }
+
+  @Get('customer-profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer {{token}}',
+  })
+  async customerProfile(@Request() req) {
     return req.user;
   }
 }

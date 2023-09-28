@@ -4,7 +4,5 @@
   "MENU": "Menu",
   "PERMISSION": "Permission",
   "STATUS": "Status",
-  "STORE": "Store",
-  "CAMPAIGN": "Campaign",
-  "VOUCHER": "Voucher"
+  "CUSTOMER": "Customer"
 }

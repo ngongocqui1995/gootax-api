@@ -1,20 +1,20 @@
 import { HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { Role } from './entities/role.entity';
 import {
   CrudRequest,
+  CrudService,
   ParsedBody,
   ParsedRequest,
-  CrudService,
 } from '@nestjsx/crud';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { BaseService } from '../../common/base.service';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
-import { Connection, Not } from 'typeorm';
 import { ENUM_MODEL } from 'src/common';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
+import { Connection, Not } from 'typeorm';
+import { BaseService } from '../../common/base.service';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { Role } from './entities/role.entity';
 
 @Injectable()
 export class RolesService extends TypeOrmCrudService<Role> {
@@ -167,29 +167,5 @@ export class RolesService extends TypeOrmCrudService<Role> {
         },
       ),
     };
-  }
-
-  async replaceAvatarMany(linkOld: string, linkNew: string) {
-    const queryRunner = this.connection.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager
-        .createQueryBuilder()
-        .update(Role)
-        .set({ avatar: () => `replace(avatar, '${linkOld}', '${linkNew}')` })
-        .where('id is not null')
-        .execute();
-
-      await queryRunner.commitTransaction();
-    } catch (err) {
-      await queryRunner.rollbackTransaction();
-      this.checkService.throwErrorSystem(err.message);
-    } finally {
-      await queryRunner.release();
-    }
-
-    return { status: HttpStatus.OK };
   }
 }

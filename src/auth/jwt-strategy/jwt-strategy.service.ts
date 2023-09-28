@@ -1,12 +1,22 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnauthorizedException,
+  forwardRef,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
-import { ENUM_STATUS } from 'src/common';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ENUM_MODEL, ENUM_STATUS } from 'src/common';
+import { CustomersService } from 'src/modules/customers/customers.service';
 import { UsersService } from '../../modules/users/users.service';
 
 @Injectable()
 export class JwtStrategyService extends PassportStrategy(Strategy) {
-  constructor(private userService: UsersService) {
+  constructor(
+    private userService: UsersService,
+    @Inject(forwardRef(() => CustomersService))
+    private customerService: CustomersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,22 +25,34 @@ export class JwtStrategyService extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    // find the user based on id from the payload.id
-    const user = await this.userService.findOne({
-      where: { id: payload.id },
-      relations: [
-        'role',
-        'role.menus',
-        'role.menus.menu',
-        'role.menus.permissions',
-      ],
-    });
-    if (!user) throw new UnauthorizedException('UnAuthorized');
+    let result;
+    switch (payload.model) {
+      case ENUM_MODEL.USER: {
+        result = await this.userService.findOne({
+          where: { id: payload.id },
+          relations: [
+            'role',
+            'role.menus',
+            'role.menus.menu',
+            'role.menus.permissions',
+          ],
+        });
+        break;
+      }
+      case ENUM_MODEL.CUSTOMER: {
+        result = await this.customerService.findOne({
+          where: { id: payload.id },
+        });
+        break;
+      }
+    }
 
-    if (user.status != ENUM_STATUS.ACTIVE)
+    if (!result) throw new UnauthorizedException('UnAuthorized');
+
+    if (result.status != ENUM_STATUS.ACTIVE)
       throw new UnauthorizedException('Tài khoản chưa kích hoạt!');
 
-    delete user.password;
-    return user;
+    delete result.password;
+    return result;
   }
 }
