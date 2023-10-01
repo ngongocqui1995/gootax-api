@@ -1,12 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { PermissionService } from './permission.service';
-import { PermissionController } from './permission.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { Permission } from './entities/permission.entity';
-import { BaseService } from 'src/common/base.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { BaseController } from 'src/common/base.controller';
+import { BaseService } from 'src/common/base.service';
 import { RoleToMenuModule } from '../role-to-menu/role-to-menu.module';
+import { Permission } from './entities/permission.entity';
+import { PermissionController } from './permission.controller';
+import { PermissionService } from './permission.service';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { RoleToMenuModule } from '../role-to-menu/role-to-menu.module';
     TypeOrmModule.forFeature([Permission]),
     forwardRef(() => RoleToMenuModule),
   ],
-  exports: [TypeOrmModule, PermissionService],
+  exports: [PermissionService],
   controllers: [PermissionController],
   providers: [PermissionService, BaseService, BaseController],
 })

@@ -34,6 +34,6 @@ import { PasswordHasherService } from './password-hasher/password-hasher.service
     JwtStrategyService,
     RolesService,
   ],
-  exports: [TypeOrmModule, AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

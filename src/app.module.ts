@@ -24,6 +24,9 @@ import { RolesModule } from './modules/roles/roles.module';
 import { UploadsModule } from './modules/uploads/uploads.module';
 import { UsersModule } from './modules/users/users.module';
 import { BookCarsModule } from './modules/book-cars/book-cars.module';
+import { ProvincesModule } from './modules/provinces/provinces.module';
+import { DistrictsModule } from './modules/districts/districts.module';
+import { WardsModule } from './modules/wards/wards.module';
 
 @Module({
   imports: [
@@ -56,6 +59,9 @@ import { BookCarsModule } from './modules/book-cars/book-cars.module';
     UploadsModule,
     DriversModule,
     BookCarsModule,
+    ProvincesModule,
+    DistrictsModule,
+    WardsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,12 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { RoleToMenuService } from './role-to-menu.service';
-import { RoleToMenuController } from './role-to-menu.controller';
-import { BaseService } from 'src/common/base.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { RoleToMenu } from './entities/role-to-menu.entity';
-import { RolesModule } from '../roles/roles.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BaseService } from 'src/common/base.service';
 import { MenusModule } from '../menus/menus.module';
+import { RolesModule } from '../roles/roles.module';
+import { RoleToMenu } from './entities/role-to-menu.entity';
+import { RoleToMenuController } from './role-to-menu.controller';
+import { RoleToMenuService } from './role-to-menu.service';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { MenusModule } from '../menus/menus.module';
     forwardRef(() => RolesModule),
     forwardRef(() => MenusModule),
   ],
-  exports: [TypeOrmModule, RoleToMenuService],
+  exports: [RoleToMenuService],
   controllers: [RoleToMenuController],
   providers: [RoleToMenuService, BaseService],
 })

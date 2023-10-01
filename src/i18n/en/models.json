@@ -5,5 +5,8 @@
   "PERMISSION": "Permission",
   "STATUS": "Status",
   "CUSTOMER": "Customer",
-  "DRIVER": "Driver"
+  "DRIVER": "Driver",
+  "PROVINCE": "Province",
+  "DISTRICT": "District",
+  "WARD": "Ward"
 }

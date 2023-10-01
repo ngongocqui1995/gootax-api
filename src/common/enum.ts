@@ -19,6 +19,9 @@ export enum ENUM_MODEL {
   CUSTOMER = 'CUSTOMER',
   DRIVER = 'DRIVER',
   BOOK_CAR = 'BOOK_CAR',
+  PROVINCE = 'PROVINCE',
+  DISTRICT = 'DISTRICT',
+  WARD = 'WARD',
 }
 
 export const ENUM_DIMENSIONS = {
