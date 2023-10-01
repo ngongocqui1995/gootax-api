@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { District } from 'src/modules/districts/entities/district.entity';
+import { Ward } from 'src/modules/wards/entities/ward.entity';
 import {
   Column,
   Entity,
@@ -43,6 +44,9 @@ export class Province extends BaseEntity {
 
   @OneToMany(() => District, (district) => district.province)
   districts: District[];
+
+  @OneToMany(() => Ward, (ward) => ward.province)
+  wards: Ward[];
 
   @ApiProperty({
     enum: ['ACTIVE', 'INACTIVE'],

@@ -28,10 +28,13 @@ export class Ward extends BaseEntity {
     description: 'Province Id',
     example: '1',
   })
-  @ManyToOne(() => Province, (province) => province.districts, {
+  @ManyToOne(() => Province, (province) => province.wards, {
     nullable: false,
   })
-  @JoinColumn({ name: 'province' })
+  @JoinColumn({
+    name: 'province',
+    foreignKeyConstraintName: 'fk_province_ward',
+  })
   province: Province;
 
   @ApiProperty({
@@ -43,7 +46,10 @@ export class Ward extends BaseEntity {
   @ManyToOne(() => District, (district) => district.wards, {
     nullable: false,
   })
-  @JoinColumn({ name: 'province' })
+  @JoinColumn({
+    name: 'province',
+    foreignKeyConstraintName: 'fk_district_ward',
+  })
   district: District;
 
   @ApiProperty({

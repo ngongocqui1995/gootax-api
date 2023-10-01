@@ -64,7 +64,7 @@ export class BookCar extends BaseEntity {
   @JoinColumn({
     name: 'phone',
     referencedColumnName: 'phone',
-    foreignKeyConstraintName: 'customer_phone',
+    foreignKeyConstraintName: 'fk_customer_phone',
   })
   customer_phone: Customer;
 
@@ -78,7 +78,7 @@ export class BookCar extends BaseEntity {
   @JoinColumn({
     name: 'phone',
     referencedColumnName: 'phone',
-    foreignKeyConstraintName: 'driver_phone',
+    foreignKeyConstraintName: 'fk_driver_phone',
   })
   driver_phone: Driver;
 
