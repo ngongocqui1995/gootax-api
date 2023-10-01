@@ -16,17 +16,17 @@ import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
 import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { Customer } from './entities/customer.entity';
+import { CreateDriverDto } from './dto/create-driver.dto';
+import { UpdateDriverDto } from './dto/update-driver.dto';
+import { Driver } from './entities/driver.entity';
 
 @Injectable()
-export class CustomersService extends TypeOrmCrudService<Customer> {
-  model_name: string = ENUM_MODEL.CUSTOMER;
+export class DriversService extends TypeOrmCrudService<Driver> {
+  model_name: string = ENUM_MODEL.DRIVER;
   status_name: string = ENUM_MODEL.STATUS;
 
   constructor(
-    @InjectRepository(Customer) repo,
+    @InjectRepository(Driver) repo,
     private checkService: BaseService,
     private hashService: PasswordHasherService,
     private connection: Connection,
@@ -34,7 +34,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
     super(repo);
   }
 
-  get base(): CrudService<Customer> {
+  get base(): CrudService<Driver> {
     return this;
   }
 
@@ -48,7 +48,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
   async replaceOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateDriverDto,
     @I18nLang() lang: string,
   ) {
     const phoneExist = await this.findOne({
@@ -57,7 +57,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
     this.checkService.checkPhoneExist(!!phoneExist);
 
     delete dto.password;
-    const [err] = await to(this.replaceOne(req, <Customer>dto));
+    const [err] = await to(this.replaceOne(req, <Driver>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -80,7 +80,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
   async updateOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: UpdateCustomerDto,
+    @ParsedBody() dto: UpdateDriverDto,
     @I18nLang() lang: string,
   ) {
     const phoneExist = await this.findOne({
@@ -89,7 +89,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
     this.checkService.checkPhoneExist(!!phoneExist);
 
     delete dto.password;
-    const [err] = await to(this.updateOne(req, <Customer>dto));
+    const [err] = await to(this.updateOne(req, <Driver>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -111,7 +111,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
   async createOneBase(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateDriverDto,
     @I18nLang() lang: string,
   ) {
     const phoneExist = await this.findOne({
@@ -121,7 +121,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
     const encryptedPassword = this.hashService.hashPassword(dto.password);
     const [err] = await to(
-      this.createOne(req, <Customer>{
+      this.createOne(req, <Driver>{
         ...dto,
         password: encryptedPassword,
       }),
@@ -158,7 +158,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
     try {
       await queryRunner.manager
         .createQueryBuilder()
-        .update(Customer)
+        .update(Driver)
         .set({ status: updateStatusDTO.status })
         .where('id = :id', { id })
         .execute();
@@ -216,7 +216,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
       await queryRunner.manager
         .createQueryBuilder()
-        .update(Customer)
+        .update(Driver)
         .set({ password: encryptedPassword })
         .where('id = :id', { id: req.user.id })
         .execute();
@@ -257,7 +257,7 @@ export class CustomersService extends TypeOrmCrudService<Customer> {
 
       await queryRunner.manager
         .createQueryBuilder()
-        .update(Customer)
+        .update(Driver)
         .set({ password: encryptedPassword })
         .where('id = :id', { id: changePasswordDTO.user })
         .execute();

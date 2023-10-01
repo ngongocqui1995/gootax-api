@@ -24,20 +24,18 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseController } from 'src/common/base.controller';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { ROLES } from '../roles/contants/contants';
-import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
-import { ChangePasswordDTO } from '../users/dto/change-password.dto';
-import { CustomersService } from './customers.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { Customer } from './entities/customer.entity';
+import { BookCarsService } from './book-cars.service';
+import { CreateBookCarDto } from './dto/create-book-car.dto';
+import { UpdateBookCarDto } from './dto/update-book-car.dto';
+import { BookCar } from './entities/book-car.entity';
 
 @Crud({
   model: {
-    type: Customer,
+    type: BookCar,
   },
   dto: {
-    create: CreateCustomerDto,
-    update: UpdateCustomerDto,
+    create: CreateBookCarDto,
+    update: UpdateBookCarDto,
   },
   query: {
     join: {
@@ -58,17 +56,17 @@ import { Customer } from './entities/customer.entity';
     },
   },
 })
-@ApiTags('Customers')
-@Controller('customers')
-export class CustomersController implements CrudController<Customer> {
-  model_name: string = ENUM_MODEL.CUSTOMER;
+@ApiTags('Book-Cars')
+@Controller('book-cars')
+export class BookCarsController implements CrudController<BookCar> {
+  model_name: string = ENUM_MODEL.BOOK_CAR;
 
   constructor(
-    public service: CustomersService,
+    public service: BookCarsService,
     private checkController: BaseController,
   ) {}
 
-  get base(): CrudController<Customer> {
+  get base(): CrudController<BookCar> {
     return this;
   }
 
@@ -96,7 +94,7 @@ export class CustomersController implements CrudController<Customer> {
   coolFunction(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateBookCarDto,
     @I18nLang() lang: string,
   ) {
     return this.service.updateOneBase(id, req, dto, lang);
@@ -112,7 +110,7 @@ export class CustomersController implements CrudController<Customer> {
   awesomePUT(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateBookCarDto,
     @I18nLang() lang: string,
   ) {
     return this.service.replaceOneBase(id, req, dto, lang);
@@ -127,7 +125,7 @@ export class CustomersController implements CrudController<Customer> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateBookCarDto,
     @I18nLang() lang: string,
   ) {
     return this.service.createOneBase(req, dto, lang);
@@ -156,35 +154,5 @@ export class CustomersController implements CrudController<Customer> {
   ) {
     this.checkController.checkStatusUser(id, req?.user?.id);
     return this.service.updateStatus(id, updateStatusDTO, lang);
-  }
-
-  @Put('update/change-password')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer {{token}}',
-  })
-  async changePassword(
-    @Request() req,
-    @Body(ValidationPipe) changePasswordDTO: ChangePasswordDTO,
-    @I18nLang() lang: string,
-  ) {
-    return this.service.changePassword(req, changePasswordDTO, lang);
-  }
-
-  @Put('update-email/change-password')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer {{token}}',
-  })
-  async emailChangePassword(
-    @Request() req,
-    @Body(ValidationPipe) changePasswordDTO: ChangePasswordEmailDTO,
-    @I18nLang() lang: string,
-  ) {
-    return this.service.emailChangePassword(req, changePasswordDTO, lang);
   }
 }

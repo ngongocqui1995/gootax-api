@@ -26,18 +26,18 @@ import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { ROLES } from '../roles/contants/contants';
 import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
-import { CustomersService } from './customers.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { Customer } from './entities/customer.entity';
+import { DriversService } from './drivers.service';
+import { CreateDriverDto } from './dto/create-driver.dto';
+import { UpdateDriverDto } from './dto/update-driver.dto';
+import { Driver } from './entities/driver.entity';
 
 @Crud({
   model: {
-    type: Customer,
+    type: Driver,
   },
   dto: {
-    create: CreateCustomerDto,
-    update: UpdateCustomerDto,
+    create: CreateDriverDto,
+    update: UpdateDriverDto,
   },
   query: {
     join: {
@@ -58,17 +58,17 @@ import { Customer } from './entities/customer.entity';
     },
   },
 })
-@ApiTags('Customers')
-@Controller('customers')
-export class CustomersController implements CrudController<Customer> {
-  model_name: string = ENUM_MODEL.CUSTOMER;
+@ApiTags('Drivers')
+@Controller('drivers')
+export class DriversController implements CrudController<Driver> {
+  model_name: string = ENUM_MODEL.DRIVER;
 
   constructor(
-    public service: CustomersService,
+    public service: DriversService,
     private checkController: BaseController,
   ) {}
 
-  get base(): CrudController<Customer> {
+  get base(): CrudController<Driver> {
     return this;
   }
 
@@ -96,7 +96,7 @@ export class CustomersController implements CrudController<Customer> {
   coolFunction(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateDriverDto,
     @I18nLang() lang: string,
   ) {
     return this.service.updateOneBase(id, req, dto, lang);
@@ -112,7 +112,7 @@ export class CustomersController implements CrudController<Customer> {
   awesomePUT(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateDriverDto,
     @I18nLang() lang: string,
   ) {
     return this.service.replaceOneBase(id, req, dto, lang);
@@ -127,7 +127,7 @@ export class CustomersController implements CrudController<Customer> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateCustomerDto,
+    @ParsedBody() dto: CreateDriverDto,
     @I18nLang() lang: string,
   ) {
     return this.service.createOneBase(req, dto, lang);

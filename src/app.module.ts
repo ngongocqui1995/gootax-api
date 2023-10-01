@@ -15,12 +15,15 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AllExceptionsFilter } from './common/i18n/exceptions-filter';
 import configuration from './config/orm.config';
+import { CustomersModule } from './modules/customers/customers.module';
+import { DriversModule } from './modules/drivers/drivers.module';
 import { MenusModule } from './modules/menus/menus.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { RoleToMenuModule } from './modules/role-to-menu/role-to-menu.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
 import { UsersModule } from './modules/users/users.module';
-import { CustomersModule } from './modules/customers/customers.module';
+import { BookCarsModule } from './modules/book-cars/book-cars.module';
 
 @Module({
   imports: [
@@ -50,6 +53,9 @@ import { CustomersModule } from './modules/customers/customers.module';
     MenusModule,
     PermissionModule,
     CustomersModule,
+    UploadsModule,
+    DriversModule,
+    BookCarsModule,
   ],
   controllers: [AppController],
   providers: [

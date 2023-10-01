@@ -10,14 +10,14 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('customers')
-export class Customer extends BaseEntity {
+@Entity('drivers')
+export class Driver extends BaseEntity {
   @ApiProperty({
     type: String,
     description: 'Id',
   })
   @PrimaryGeneratedColumn('uuid')
-  @Index('pk_customer_id', ['id'], { unique: true })
+  @Index('pk_driver_id', ['id'], { unique: true })
   id: string;
 
   @ApiProperty({
@@ -85,6 +85,6 @@ export class Customer extends BaseEntity {
   })
   status: string;
 
-  @OneToMany((type) => BookCar, (book) => book.customer_phone)
-  books: BookCar[];
+  @OneToMany((type) => BookCar, (book) => book.driver_phone)
+  receive_books: BookCar[];
 }

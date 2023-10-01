@@ -24,7 +24,7 @@ import { ENUM_MODEL } from 'src/common';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { BaseController } from '../../common/base.controller';
 import { ROLES } from '../roles/contants/contants';
-import { ChangePasswordCustomerDTO } from './dto/change-password-customer.dto';
+import { ChangePasswordEmailDTO } from './dto/change-password-email.dto';
 import { ChangePasswordDTO } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -182,7 +182,7 @@ export class UsersController implements CrudController<User> {
   })
   async emailChangePassword(
     @Request() req,
-    @Body(ValidationPipe) changePasswordDTO: ChangePasswordCustomerDTO,
+    @Body(ValidationPipe) changePasswordDTO: ChangePasswordEmailDTO,
     @I18nLang() lang: string,
   ) {
     return this.service.emailChangePassword(req, changePasswordDTO, lang);

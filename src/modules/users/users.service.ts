@@ -23,7 +23,7 @@ import { PasswordHasherService } from '../../auth/password-hasher/password-hashe
 import { BaseService } from '../../common/base.service';
 import { ROLES } from '../roles/contants/contants';
 import { RolesService } from '../roles/roles.service';
-import { ChangePasswordCustomerDTO } from './dto/change-password-customer.dto';
+import { ChangePasswordEmailDTO } from './dto/change-password-email.dto';
 import { ChangePasswordDTO } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -288,7 +288,7 @@ export class UsersService extends TypeOrmCrudService<User> {
 
   async emailChangePassword(
     @Request() req,
-    changePasswordDTO: ChangePasswordCustomerDTO,
+    changePasswordDTO: ChangePasswordEmailDTO,
     @I18nLang() lang: string,
   ) {
     // verify user password
