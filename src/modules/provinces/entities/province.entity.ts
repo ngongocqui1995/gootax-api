@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
 import { District } from 'src/modules/districts/entities/district.entity';
 import { Ward } from 'src/modules/wards/entities/ward.entity';
 import {
@@ -39,7 +38,6 @@ export class Province extends BaseEntity {
   })
   @Index('pk_province_code', ['code'], { unique: true })
   @Column({ type: 'varchar', nullable: true, length: 50 })
-  @Exclude({ toPlainOnly: true })
   code: string;
 
   @OneToMany(() => District, (district) => district.province)

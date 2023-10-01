@@ -12,7 +12,7 @@ import { I18nLang } from 'nestjs-i18n';
 import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
-import { Connection } from 'typeorm';
+import { Connection, Not } from 'typeorm';
 import { CreateWardDto } from './dto/create-ward.dto';
 import { UpdateWardDto } from './dto/update-ward.dto';
 import { Ward } from './entities/ward.entity';
@@ -48,7 +48,7 @@ export class WardsService extends TypeOrmCrudService<Ward> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code },
+      where: { code: dto.code, id: Not(id) },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
@@ -79,7 +79,7 @@ export class WardsService extends TypeOrmCrudService<Ward> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code },
+      where: { code: dto.code, id: Not(id) },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
