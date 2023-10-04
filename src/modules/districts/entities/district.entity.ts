@@ -9,9 +9,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 
+@Unique('uq_province_district', ['province', 'code'])
 @Entity('districts')
 export class District extends BaseEntity {
   @ApiProperty({
@@ -50,7 +52,7 @@ export class District extends BaseEntity {
     description: 'Code',
     example: '1',
   })
-  @Index('pk_district_code', ['code'], { unique: true })
+  @Index('pk_district_code', ['code'])
   @Column({ type: 'varchar', nullable: true, length: 50 })
   code: string;
 

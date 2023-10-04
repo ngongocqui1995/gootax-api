@@ -39,7 +39,7 @@ import { District } from './entities/district.entity';
   },
   query: {
     join: {
-      role: {
+      province: {
         allow: undefined,
       },
     },

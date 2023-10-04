@@ -37,14 +37,6 @@ import { BookCar } from './entities/book-car.entity';
     create: CreateBookCarDto,
     update: UpdateBookCarDto,
   },
-  query: {
-    join: {
-      role: {
-        allow: undefined,
-      },
-    },
-    exclude: ['id'],
-  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },

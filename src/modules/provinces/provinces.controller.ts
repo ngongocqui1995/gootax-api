@@ -37,14 +37,6 @@ import { ProvincesService } from './provinces.service';
     create: CreateProvinceDto,
     update: UpdateProvinceDto,
   },
-  query: {
-    join: {
-      role: {
-        allow: undefined,
-      },
-    },
-    exclude: ['id'],
-  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },

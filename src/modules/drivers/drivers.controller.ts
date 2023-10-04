@@ -39,14 +39,6 @@ import { Driver } from './entities/driver.entity';
     create: CreateDriverDto,
     update: UpdateDriverDto,
   },
-  query: {
-    join: {
-      role: {
-        allow: undefined,
-      },
-    },
-    exclude: ['id'],
-  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },

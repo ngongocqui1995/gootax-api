@@ -39,14 +39,6 @@ import { Customer } from './entities/customer.entity';
     create: CreateCustomerDto,
     update: UpdateCustomerDto,
   },
-  query: {
-    join: {
-      role: {
-        allow: undefined,
-      },
-    },
-    exclude: ['id'],
-  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },

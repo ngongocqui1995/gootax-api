@@ -39,7 +39,10 @@ import { WardsService } from './wards.service';
   },
   query: {
     join: {
-      role: {
+      province: {
+        allow: undefined,
+      },
+      district: {
         allow: undefined,
       },
     },

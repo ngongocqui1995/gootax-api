@@ -48,7 +48,11 @@ export class DistrictsService extends TypeOrmCrudService<District> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code, id: Not(id) },
+      where: {
+        code: dto.code,
+        province: { id: dto.province.toString() },
+        id: Not(id),
+      },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
@@ -79,7 +83,11 @@ export class DistrictsService extends TypeOrmCrudService<District> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code, id: Not(id) },
+      where: {
+        code: dto.code,
+        province: { id: dto.province.toString() },
+        id: Not(id),
+      },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
@@ -109,7 +117,7 @@ export class DistrictsService extends TypeOrmCrudService<District> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code },
+      where: { code: dto.code, province: { id: dto.province.toString() } },
     });
     this.checkService.checkCodeExist(!!codeExist);
 

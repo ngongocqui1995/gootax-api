@@ -9,8 +9,10 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 
+@Unique('uq_province_district_ward', ['province', 'district', 'code'])
 @Entity('wards')
 export class Ward extends BaseEntity {
   @ApiProperty({
@@ -46,7 +48,7 @@ export class Ward extends BaseEntity {
     nullable: false,
   })
   @JoinColumn({
-    name: 'province',
+    name: 'district',
     foreignKeyConstraintName: 'fk_district_ward',
   })
   district: District;
@@ -67,7 +69,7 @@ export class Ward extends BaseEntity {
     description: 'Code',
     example: '1',
   })
-  @Index('pk_ward_code', ['code'], { unique: true })
+  @Index('pk_ward_code', ['code'])
   @Column({ type: 'varchar', nullable: true, length: 50 })
   code: string;
 
