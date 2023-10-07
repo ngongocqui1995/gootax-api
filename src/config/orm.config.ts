@@ -19,9 +19,9 @@ export default (): ConfigState => {
       synchronize: process.env.SYNCHRONIZE_POSTGRES === 'true',
       logging: true,
       autoLoadEntities: true,
-      // ssl: {
-      //   rejectUnauthorized: false,
-      // },
+      ssl: {
+		rejectUnauthorized: false,
+      },
     },
   };
 };
