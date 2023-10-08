@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Vehicle } from 'src/modules/vehicles/entities/vehicle.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('company')
 export class Company extends BaseEntity {
@@ -30,6 +37,9 @@ export class Company extends BaseEntity {
   })
   @Column({ type: 'varchar', nullable: false, length: 50 })
   name: string;
+
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.company)
+  vehicles: Vehicle[];
 
   @ApiProperty({
     enum: ['ACTIVE', 'INACTIVE'],

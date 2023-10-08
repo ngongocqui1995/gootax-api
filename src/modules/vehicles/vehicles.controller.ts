@@ -40,6 +40,14 @@ import { VehiclesService } from './vehicles.service';
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },
+  query: {
+    join: {
+      company: {
+        allow: undefined,
+      },
+    },
+    exclude: ['id'],
+  },
   params: {
     id: {
       type: 'uuid',

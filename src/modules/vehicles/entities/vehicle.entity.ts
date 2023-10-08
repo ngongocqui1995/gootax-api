@@ -1,7 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Company } from 'src/modules/company/entities/company.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
+@Unique('uq_company_vehicle', ['company', 'code'])
 @Entity('vehicle')
 export class Vehicle extends BaseEntity {
   @ApiProperty({
@@ -30,6 +40,18 @@ export class Vehicle extends BaseEntity {
   })
   @Column({ type: 'varchar', nullable: false, length: 50 })
   name: string;
+
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Company Id',
+    example: '1',
+  })
+  @ManyToOne(() => Company, (company) => company.vehicles, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'company' })
+  company: Company;
 
   @ApiProperty({
     enum: ['ACTIVE', 'INACTIVE'],
