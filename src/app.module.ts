@@ -27,6 +27,7 @@ import { BookCarsModule } from './modules/book-cars/book-cars.module';
 import { ProvincesModule } from './modules/provinces/provinces.module';
 import { DistrictsModule } from './modules/districts/districts.module';
 import { WardsModule } from './modules/wards/wards.module';
+import { TypeCarsModule } from './modules/type-cars/type-cars.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { WardsModule } from './modules/wards/wards.module';
     ProvincesModule,
     DistrictsModule,
     WardsModule,
+    TypeCarsModule,
   ],
   controllers: [AppController],
   providers: [

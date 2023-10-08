@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, Param, Request } from '@nestjs/common';
+import { HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CrudRequest,
@@ -10,50 +10,41 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
 import { ENUM_MODEL } from 'src/common';
+import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
-import { BaseService } from '../../common/base.service';
-import { User } from '../users/entities/user.entity';
-import { ROLES } from './contants/contants';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { Role } from './entities/role.entity';
+import { CreateTypeCarDto } from './dto/create-type-car.dto';
+import { UpdateTypeCarDto } from './dto/update-type-car.dto';
+import { TypeCar } from './entities/type-car.entity';
 
 @Injectable()
-export class RolesService extends TypeOrmCrudService<Role> {
+export class TypeCarsService extends TypeOrmCrudService<TypeCar> {
+  model_name: string = ENUM_MODEL.TYPE_CAR;
   status_name: string = ENUM_MODEL.STATUS;
-  model_name: string = ENUM_MODEL.ROLE;
 
   constructor(
-    @InjectRepository(Role) repo,
+    @InjectRepository(TypeCar) repo,
     private checkService: BaseService,
     private connection: Connection,
   ) {
     super(repo);
   }
 
-  get base(): CrudService<Role> {
+  get base(): CrudService<TypeCar> {
     return this;
   }
 
-  async getManyBase(@ParsedRequest() req: CrudRequest, @Request() request) {
+  async getManyBase(@ParsedRequest() req: CrudRequest) {
     const { parsed, options } = req;
-    const user: User = request.user;
     const builder = await this.createBuilder(parsed, options);
-
-    switch (user.role.code) {
-      case ROLES.ROLE_ADMIN: {
-        builder.andWhere(`code != :code`, { code: ROLES.ROLE_ROOT });
-        break;
-      }
-    }
 
     return await this.doGetMany(builder, parsed, options);
   }
 
-  async updateOneBase(
+  async replaceOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateRoleDto,
+    @ParsedBody() dto: CreateTypeCarDto,
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
@@ -61,7 +52,7 @@ export class RolesService extends TypeOrmCrudService<Role> {
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.updateOne(req, <Role>dto));
+    const [err] = await to(this.replaceOne(req, <TypeCar>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -81,10 +72,10 @@ export class RolesService extends TypeOrmCrudService<Role> {
     };
   }
 
-  async replaceOneBase(
+  async updateOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateRoleDto,
+    @ParsedBody() dto: UpdateTypeCarDto,
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
@@ -92,7 +83,7 @@ export class RolesService extends TypeOrmCrudService<Role> {
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.replaceOne(req, <Role>dto));
+    const [err] = await to(this.updateOne(req, <TypeCar>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -114,7 +105,7 @@ export class RolesService extends TypeOrmCrudService<Role> {
 
   async createOneBase(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateRoleDto,
+    @ParsedBody() dto: CreateTypeCarDto,
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
@@ -122,7 +113,7 @@ export class RolesService extends TypeOrmCrudService<Role> {
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.createOne(req, <Role>dto));
+    const [err] = await to(this.createOne(req, <TypeCar>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
 
     return {
@@ -155,7 +146,7 @@ export class RolesService extends TypeOrmCrudService<Role> {
     try {
       await queryRunner.manager
         .createQueryBuilder()
-        .update(Role)
+        .update(TypeCar)
         .set({ status: updateStatusDTO.status })
         .where('id = :id', { id })
         .execute();

@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('book-car')
+@Entity('book-cars')
 export class BookCar extends BaseEntity {
   @ApiProperty({
     type: String,

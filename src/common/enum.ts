@@ -22,6 +22,7 @@ export enum ENUM_MODEL {
   PROVINCE = 'PROVINCE',
   DISTRICT = 'DISTRICT',
   WARD = 'WARD',
+  TYPE_CAR = 'TYPE_CAR',
 }
 
 export const ENUM_DIMENSIONS = {
