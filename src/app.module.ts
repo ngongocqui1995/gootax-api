@@ -28,6 +28,10 @@ import { ProvincesModule } from './modules/provinces/provinces.module';
 import { DistrictsModule } from './modules/districts/districts.module';
 import { WardsModule } from './modules/wards/wards.module';
 import { TypeCarsModule } from './modules/type-cars/type-cars.module';
+import { CarsModule } from './modules/cars/cars.module';
+import { CompanyModule } from './modules/company/company.module';
+import { VehiclesModule } from './modules/vehicles/vehicles.module';
+import { CarStyleModule } from './modules/car-style/car-style.module';
 
 @Module({
   imports: [
@@ -64,6 +68,10 @@ import { TypeCarsModule } from './modules/type-cars/type-cars.module';
     DistrictsModule,
     WardsModule,
     TypeCarsModule,
+    CarsModule,
+    CompanyModule,
+    VehiclesModule,
+    CarStyleModule,
   ],
   controllers: [AppController],
   providers: [

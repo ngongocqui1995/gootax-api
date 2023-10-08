@@ -9,6 +9,7 @@ import {
   Length,
   Matches,
 } from 'class-validator';
+import { Car } from 'src/modules/cars/entities/car.entity';
 
 const { UPDATE, CREATE } = CrudValidationGroups;
 
@@ -42,6 +43,19 @@ export class CreateDriverDto {
     example: 'abc',
   })
   name: string;
+
+  @IsString({ message: 'errors.NAME_STRING' })
+  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
+  @Length(3, 50, { message: 'errors.NAME_LENGTH_3_50' })
+  @ApiProperty({
+    type: String,
+    minLength: 3,
+    maxLength: 50,
+    required: true,
+    description: 'Name',
+    example: 'abc',
+  })
+  car: Car;
 
   @IsOptional()
   @IsString({ message: 'errors.AVATAR_STRING' })

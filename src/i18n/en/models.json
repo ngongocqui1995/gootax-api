@@ -8,5 +8,11 @@
   "DRIVER": "Driver",
   "PROVINCE": "Province",
   "DISTRICT": "District",
-  "WARD": "Ward"
+  "WARD": "Ward",
+  "COMPANY": "Car Company",
+  "TYPE_CAR": "Type Car",
+  "BOOK_CAR": "Book Car",
+  "VEHICLE": "Vehicle",
+  "CAR_STYLE": "Car Style",
+  "CAR": "Car"
 }

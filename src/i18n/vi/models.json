@@ -8,5 +8,11 @@
   "DRIVER": "Tài xế",
   "PROVINCE": "Tỉnh/Thành phố",
   "DISTRICT": "Quận/Huyện",
-  "WARD": "Phường/Xã"
+  "WARD": "Phường/Xã",
+  "COMPANY": "Hãng xe",
+  "TYPE_CAR": "Loại xe",
+  "BOOK_CAR": "Đặt xe",
+  "VEHICLE": "Dòng xe",
+  "CAR_STYLE": "Kiểu dáng xe",
+  "CAR": "Xe"
 }

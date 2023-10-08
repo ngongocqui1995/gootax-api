@@ -2,11 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { BookCar } from 'src/modules/book-cars/entities/book-car.entity';
+import { Car } from 'src/modules/cars/entities/car.entity';
 import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -84,6 +87,12 @@ export class Driver extends BaseEntity {
     enum: ['ACTIVE', 'INACTIVE'],
   })
   status: string;
+
+  @OneToOne(() => Car, {
+    nullable: false,
+  })
+  @JoinColumn()
+  car: Car;
 
   @OneToMany((type) => BookCar, (book) => book.driver_phone)
   receive_books: BookCar[];

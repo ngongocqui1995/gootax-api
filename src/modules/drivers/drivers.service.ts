@@ -57,7 +57,12 @@ export class DriversService extends TypeOrmCrudService<Driver> {
     this.checkService.checkPhoneExist(!!phoneExist);
 
     delete dto.password;
-    const [err] = await to(this.replaceOne(req, <Driver>dto));
+    const [err] = await to(
+      this.replaceOne(req, <Driver>{
+        ...dto,
+        car: { id: dto.car.toString() },
+      }),
+    );
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -89,7 +94,12 @@ export class DriversService extends TypeOrmCrudService<Driver> {
     this.checkService.checkPhoneExist(!!phoneExist);
 
     delete dto.password;
-    const [err] = await to(this.updateOne(req, <Driver>dto));
+    const [err] = await to(
+      this.updateOne(req, <Driver>{
+        ...dto,
+        car: { id: dto.car.toString() },
+      }),
+    );
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -124,6 +134,7 @@ export class DriversService extends TypeOrmCrudService<Driver> {
       this.createOne(req, <Driver>{
         ...dto,
         password: encryptedPassword,
+        car: { id: dto.car.toString() },
       }),
     );
     if (err) this.checkService.throwErrorSystem(err.message);

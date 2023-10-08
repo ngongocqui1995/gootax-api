@@ -24,18 +24,18 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseController } from 'src/common/base.controller';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { ROLES } from '../roles/contants/contants';
-import { CreateTypeCarDto } from './dto/create-type-car.dto';
-import { UpdateTypeCarDto } from './dto/update-type-car.dto';
-import { TypeCar } from './entities/type-car.entity';
-import { TypeCarsService } from './type-cars.service';
+import { CarStyleService } from './car-style.service';
+import { CreateCarStyleDto } from './dto/create-car-style.dto';
+import { UpdateCarStyleDto } from './dto/update-car-style.dto';
+import { CarStyle } from './entities/car-style.entity';
 
 @Crud({
   model: {
-    type: TypeCar,
+    type: CarStyle,
   },
   dto: {
-    create: CreateTypeCarDto,
-    update: UpdateTypeCarDto,
+    create: CreateCarStyleDto,
+    update: UpdateCarStyleDto,
   },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
@@ -48,17 +48,17 @@ import { TypeCarsService } from './type-cars.service';
     },
   },
 })
-@ApiTags('Type-Cars')
-@Controller('type-cars')
-export class TypeCarsController implements CrudController<TypeCar> {
-  model_name: string = ENUM_MODEL.TYPE_CAR;
+@ApiTags('Car-Style')
+@Controller('car-style')
+export class CarStyleController implements CrudController<CarStyle> {
+  model_name: string = ENUM_MODEL.CAR_STYLE;
 
   constructor(
-    public service: TypeCarsService,
+    public service: CarStyleService,
     private checkController: BaseController,
   ) {}
 
-  get base(): CrudController<TypeCar> {
+  get base(): CrudController<CarStyle> {
     return this;
   }
 
@@ -90,7 +90,7 @@ export class TypeCarsController implements CrudController<TypeCar> {
   coolFunction(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateTypeCarDto,
+    @ParsedBody() dto: CreateCarStyleDto,
     @I18nLang() lang: string,
   ) {
     return this.service.updateOneBase(id, req, dto, lang);
@@ -106,7 +106,7 @@ export class TypeCarsController implements CrudController<TypeCar> {
   awesomePUT(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateTypeCarDto,
+    @ParsedBody() dto: CreateCarStyleDto,
     @I18nLang() lang: string,
   ) {
     return this.service.replaceOneBase(id, req, dto, lang);
@@ -121,7 +121,7 @@ export class TypeCarsController implements CrudController<TypeCar> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateTypeCarDto,
+    @ParsedBody() dto: CreateCarStyleDto,
     @I18nLang() lang: string,
   ) {
     return this.service.createOneBase(req, dto, lang);
