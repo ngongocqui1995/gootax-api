@@ -28,8 +28,8 @@ export class Vehicle extends BaseEntity {
     description: 'admin',
     example: 'admin',
   })
-  @Index('pk_vehicle_code', ['code'], { unique: true })
-  @Column({ type: 'varchar', unique: true, nullable: false, length: 50 })
+  @Index('pk_vehicle_code', ['code'])
+  @Column({ type: 'varchar', nullable: false, length: 50 })
   code: string;
 
   @ApiProperty({

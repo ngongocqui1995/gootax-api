@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsDateString,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -23,33 +25,31 @@ export class CreateCarDto {
   })
   name: string;
 
-  @IsString({ message: 'errors.NAME_STRING' })
-  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
-  @Length(3, 50, { message: 'errors.NAME_LENGTH_3_50' })
+  @IsOptional()
+  @IsString({ message: 'errors.AVATAR_STRING' })
+  @IsNotEmpty({ message: 'errors.AVATAR_NOT_EMPTY' })
   @ApiProperty({
     type: String,
-    required: true,
-    description: 'Admin',
-    example: 'Admin',
+    description: 'Avatar',
+    example: 'avatar',
+    required: false,
   })
-  version: string;
+  avatar: string;
 
-  @IsString({ message: 'errors.NAME_STRING' })
-  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
-  @Length(3, 50, { message: 'errors.NAME_LENGTH_3_50' })
+  @IsDateString()
+  @IsNotEmpty()
   @ApiProperty({
-    type: String,
+    type: Date,
     required: true,
     description: 'Admin',
     example: 'Admin',
   })
   year: Date;
 
-  @IsString({ message: 'errors.NAME_STRING' })
-  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
-  @Length(3, 50, { message: 'errors.NAME_LENGTH_3_50' })
+  @IsNumber()
+  @IsNotEmpty()
   @ApiProperty({
-    type: String,
+    type: Number,
     required: true,
     description: 'Admin',
     example: 'Admin',

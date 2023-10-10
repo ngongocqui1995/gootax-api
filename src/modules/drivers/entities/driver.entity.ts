@@ -83,8 +83,8 @@ export class Driver extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: false,
-    default: 'ACTIVE',
-    enum: ['ACTIVE', 'INACTIVE'],
+    default: 'INIT',
+    enum: ['INIT', 'ACTIVE', 'INACTIVE'],
   })
   status: string;
 
@@ -94,6 +94,6 @@ export class Driver extends BaseEntity {
   @JoinColumn()
   car: Car;
 
-  @OneToMany((type) => BookCar, (book) => book.driver_phone)
+  @OneToMany(() => BookCar, (book) => book.driver_phone)
   receive_books: BookCar[];
 }

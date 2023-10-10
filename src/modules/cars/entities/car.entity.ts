@@ -25,6 +25,14 @@ export class Car extends BaseEntity {
 
   @ApiProperty({
     type: String,
+    description: 'Avatar',
+    example: 'avatar',
+  })
+  @Column({ type: 'varchar', nullable: true })
+  avatar: string;
+
+  @ApiProperty({
+    type: String,
     required: true,
     description: 'Admin',
     example: 'Admin',
@@ -33,16 +41,7 @@ export class Car extends BaseEntity {
   name: string;
 
   @ApiProperty({
-    type: String,
-    required: true,
-    description: 'Admin',
-    example: 'Admin',
-  })
-  @Column({ type: 'varchar', nullable: false, length: 50 })
-  version: string;
-
-  @ApiProperty({
-    type: String,
+    type: Date,
     required: true,
     description: 'Admin',
     example: 'Admin',
@@ -51,12 +50,12 @@ export class Car extends BaseEntity {
   year: Date;
 
   @ApiProperty({
-    type: String,
+    type: Number,
     required: true,
     description: 'Admin',
     example: 'Admin',
   })
-  @Column({ type: 'numeric', nullable: false })
+  @Column({ type: 'int', nullable: false })
   seat: Number;
 
   @OneToOne(() => Company, {

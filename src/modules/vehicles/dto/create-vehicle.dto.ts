@@ -1,17 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Company } from 'src/modules/company/entities/company.entity';
 
 export class CreateVehicleDto {
   @IsString({ message: 'errors.CODE_STRING' })
   @IsNotEmpty({ message: 'errors.CODE_NOT_EMPTY' })
-  @Length(3, 50, { message: 'errors.CODE_LENGTH_3_50' })
   @Transform((params) => String(params.value).trim())
   @ApiProperty({
     type: String,
@@ -23,7 +17,6 @@ export class CreateVehicleDto {
 
   @IsString({ message: 'errors.NAME_STRING' })
   @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
-  @Length(3, 50, { message: 'errors.NAME_LENGTH_3_50' })
   @ApiProperty({
     type: String,
     required: true,
@@ -31,6 +24,16 @@ export class CreateVehicleDto {
     example: 'Admin',
   })
   name: string;
+
+  @IsString({ message: 'errors.NAME_STRING' })
+  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Admin',
+    example: 'Admin',
+  })
+  company: Company;
 
   @IsOptional()
   @IsString({ message: 'errors.STATUS_STRING' })

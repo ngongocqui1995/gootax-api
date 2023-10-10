@@ -100,7 +100,7 @@ export class CreateDriverDto {
   @IsIn(['ACTIVE', 'INACTIVE'], { message: 'errors.STATUS_NOT_VALID' })
   @ApiProperty({
     type: String,
-    description: 'ACTIVE, INACTIVE',
+    description: 'INIT, ACTIVE, INACTIVE',
     example: 'ACTIVE',
     required: false,
   })

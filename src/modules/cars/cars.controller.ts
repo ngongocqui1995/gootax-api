@@ -37,6 +37,23 @@ import { Car } from './entities/car.entity';
     create: CreateCarDto,
     update: UpdateCarDto,
   },
+  query: {
+    join: {
+      company: {
+        allow: undefined,
+      },
+      car_style: {
+        allow: undefined,
+      },
+      vehicle: {
+        allow: undefined,
+      },
+      type_car: {
+        allow: undefined,
+      },
+    },
+    exclude: ['id'],
+  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },

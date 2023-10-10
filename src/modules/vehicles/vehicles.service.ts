@@ -48,11 +48,20 @@ export class VehiclesService extends TypeOrmCrudService<Vehicle> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code, id: Not(id) },
+      where: {
+        code: dto.code,
+        company: { id: dto.company.toString() },
+        id: Not(id),
+      },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.replaceOne(req, <Vehicle>dto));
+    const [err] = await to(
+      this.replaceOne(req, <Vehicle>{
+        ...dto,
+        company: { id: dto.company.toString() },
+      }),
+    );
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -79,11 +88,20 @@ export class VehiclesService extends TypeOrmCrudService<Vehicle> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code, id: Not(id) },
+      where: {
+        code: dto.code,
+        company: { id: dto.company.toString() },
+        id: Not(id),
+      },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.updateOne(req, <Vehicle>dto));
+    const [err] = await to(
+      this.updateOne(req, <Vehicle>{
+        ...dto,
+        company: { id: dto.company.toString() },
+      }),
+    );
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -109,11 +127,16 @@ export class VehiclesService extends TypeOrmCrudService<Vehicle> {
     @I18nLang() lang: string,
   ) {
     const codeExist = await this.findOne({
-      where: { code: dto.code },
+      where: { code: dto.code, company: { id: dto.company.toString() } },
     });
     this.checkService.checkCodeExist(!!codeExist);
 
-    const [err] = await to(this.createOne(req, <Vehicle>dto));
+    const [err] = await to(
+      this.createOne(req, <Vehicle>{
+        ...dto,
+        company: { id: dto.company.toString() },
+      }),
+    );
     if (err) this.checkService.throwErrorSystem(err.message);
 
     return {

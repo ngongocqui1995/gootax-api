@@ -39,6 +39,26 @@ import { Driver } from './entities/driver.entity';
     create: CreateDriverDto,
     update: UpdateDriverDto,
   },
+  query: {
+    join: {
+      car: {
+        allow: undefined,
+      },
+      'car.company': {
+        allow: undefined,
+      },
+      'car.car_style': {
+        allow: undefined,
+      },
+      'car.vehicle': {
+        allow: undefined,
+      },
+      'car.type_car': {
+        allow: undefined,
+      },
+    },
+    exclude: ['id'],
+  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },
