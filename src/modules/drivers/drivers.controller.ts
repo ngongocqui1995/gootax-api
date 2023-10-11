@@ -130,8 +130,6 @@ export class DriversController implements CrudController<Driver> {
     return this.service.replaceOneBase(id, req, dto, lang);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer {{token}}',
