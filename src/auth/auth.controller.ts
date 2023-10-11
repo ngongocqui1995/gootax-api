@@ -63,7 +63,7 @@ export class AuthController {
     @Body() user: LoginCustomerDto,
     @I18nLang() lang: string,
   ): Promise<LoginRsp> {
-    return await this.authService.customerLogin(user, lang);
+    return await this.authService.driverLogin(user, lang);
   }
 
   @Get('driver-profile')

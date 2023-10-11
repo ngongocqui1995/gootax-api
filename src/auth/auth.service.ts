@@ -1,4 +1,10 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
@@ -7,6 +13,7 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { CustomersService } from 'src/modules/customers/customers.service';
 import { LoginCustomerDto } from 'src/modules/customers/dto/login-customer.dto';
+import { DriversService } from 'src/modules/drivers/drivers.service';
 import { LoginUserDto } from 'src/modules/users/dto/login-user.dto';
 import { User } from 'src/modules/users/entities/user.entity';
 import { LoginRsp } from 'src/modules/users/interfaces/user';
@@ -21,6 +28,8 @@ export class AuthService extends TypeOrmCrudService<User> {
     private jwtService: JwtService,
     @Inject(forwardRef(() => CustomersService))
     private customerService: CustomersService,
+    @Inject(forwardRef(() => DriversService))
+    private driverService: DriversService,
   ) {
     super(repo);
   }
@@ -70,7 +79,14 @@ export class AuthService extends TypeOrmCrudService<User> {
     const user = await this.customerService.findOne({
       where: { phone: dto.phone },
     });
-    this.checkService.checkPhoneExist(!!user);
+    if (!user) {
+      throw new HttpException(
+        {
+          message: 'Số điện thoại không tồn tại!',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     // check status
     this.checkService.checkStatus(user.status);
@@ -107,10 +123,17 @@ export class AuthService extends TypeOrmCrudService<User> {
     @I18nLang() lang: string,
   ): Promise<LoginRsp> {
     // verfiy customer phone
-    const user = await this.customerService.findOne({
+    const user = await this.driverService.findOne({
       where: { phone: dto.phone },
     });
-    this.checkService.checkPhoneExist(!!user);
+    if (!user) {
+      throw new HttpException(
+        {
+          message: 'Số điện thoại không tồn tại!',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     // check status
     this.checkService.checkStatus(user.status);
