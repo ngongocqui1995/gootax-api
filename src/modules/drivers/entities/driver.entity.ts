@@ -8,8 +8,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -88,10 +88,16 @@ export class Driver extends BaseEntity {
   })
   status: string;
 
-  @OneToOne(() => Car, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Car Id',
+    example: '1',
+  })
+  @ManyToOne(() => Car, (car) => car.drivers, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'car_id' })
   car: Car;
 
   @OneToMany(() => BookCar, (book) => book.driver_phone)

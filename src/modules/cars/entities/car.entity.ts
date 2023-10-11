@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { CarStyle } from 'src/modules/car-style/entities/car-style.entity';
 import { Company } from 'src/modules/company/entities/company.entity';
+import { Driver } from 'src/modules/drivers/entities/driver.entity';
 import { TypeCar } from 'src/modules/type-cars/entities/type-car.entity';
 import { Vehicle } from 'src/modules/vehicles/entities/vehicle.entity';
 import {
@@ -9,6 +10,7 @@ import {
   Entity,
   Index,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -81,6 +83,9 @@ export class Car extends BaseEntity {
   })
   @JoinColumn()
   type_car: TypeCar;
+
+  @OneToMany(() => Driver, (driver) => driver.car)
+  drivers: Driver[];
 
   @ApiProperty({
     enum: ['ACTIVE', 'INACTIVE'],
