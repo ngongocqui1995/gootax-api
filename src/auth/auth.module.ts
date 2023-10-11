@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BaseController } from 'src/common/base.controller';
 import { BaseService } from 'src/common/base.service';
 import { CustomersModule } from 'src/modules/customers/customers.module';
+import { DriversModule } from 'src/modules/drivers/drivers.module';
 import { Role } from 'src/modules/roles/entities/role.entity';
 import { RolesService } from 'src/modules/roles/roles.service';
 import { User } from 'src/modules/users/entities/user.entity';
@@ -23,6 +24,7 @@ import { PasswordHasherService } from './password-hasher/password-hasher.service
     }),
     TypeOrmModule.forFeature([User, Role]),
     forwardRef(() => CustomersModule),
+    forwardRef(() => DriversModule),
   ],
   controllers: [AuthController],
   providers: [

@@ -101,4 +101,44 @@ export class AuthService extends TypeOrmCrudService<User> {
       }),
     };
   }
+
+  async driverLogin(
+    dto: LoginCustomerDto,
+    @I18nLang() lang: string,
+  ): Promise<LoginRsp> {
+    // verfiy customer phone
+    const user = await this.customerService.findOne({
+      where: { phone: dto.phone },
+    });
+    this.checkService.checkPhoneExist(!!user);
+
+    // check status
+    this.checkService.checkStatus(user.status);
+
+    // verify user password
+    const matchedPassword = await this.hasherService.comparePassword(
+      dto.password,
+      user.password,
+    );
+    this.checkService.checkPasswordValid(matchedPassword);
+
+    // generate JSON web token
+    const token = await this.jwtService.signAsync(
+      {
+        phone: user.phone,
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar,
+        model: ENUM_MODEL.DRIVER,
+      },
+      { expiresIn: process.env.JWT_EXPIRES_IN },
+    );
+
+    return {
+      token,
+      message: await this.checkService.i18n.translate('messages.AUTH.GET', {
+        lang,
+      }),
+    };
+  }
 }

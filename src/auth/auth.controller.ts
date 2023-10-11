@@ -57,4 +57,22 @@ export class AuthController {
   async customerProfile(@Request() req) {
     return req.user;
   }
+
+  @Post('driver-login')
+  async driverLogin(
+    @Body() user: LoginCustomerDto,
+    @I18nLang() lang: string,
+  ): Promise<LoginRsp> {
+    return await this.authService.customerLogin(user, lang);
+  }
+
+  @Get('driver-profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer {{token}}',
+  })
+  async driverProfile(@Request() req) {
+    return req.user;
+  }
 }

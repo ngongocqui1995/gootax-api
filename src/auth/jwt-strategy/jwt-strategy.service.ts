@@ -8,6 +8,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ENUM_MODEL, ENUM_STATUS } from 'src/common';
 import { CustomersService } from 'src/modules/customers/customers.service';
+import { DriversService } from 'src/modules/drivers/drivers.service';
 import { UsersService } from '../../modules/users/users.service';
 
 @Injectable()
@@ -16,6 +17,8 @@ export class JwtStrategyService extends PassportStrategy(Strategy) {
     private userService: UsersService,
     @Inject(forwardRef(() => CustomersService))
     private customerService: CustomersService,
+    @Inject(forwardRef(() => DriversService))
+    private driverService: DriversService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -41,6 +44,12 @@ export class JwtStrategyService extends PassportStrategy(Strategy) {
       }
       case ENUM_MODEL.CUSTOMER: {
         result = await this.customerService.findOne({
+          where: { id: payload.id },
+        });
+        break;
+      }
+      case ENUM_MODEL.DRIVER: {
+        result = await this.driverService.findOne({
           where: { id: payload.id },
         });
         break;
