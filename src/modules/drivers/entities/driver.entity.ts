@@ -100,6 +100,6 @@ export class Driver extends BaseEntity {
   @JoinColumn({ name: 'car_id' })
   car: Car;
 
-  @OneToMany(() => BookCar, (book) => book.driver_phone)
-  receive_books: BookCar[];
+  @OneToMany(() => BookCar, (book) => book.driver)
+  book_cars: BookCar[];
 }

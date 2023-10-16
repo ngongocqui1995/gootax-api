@@ -85,6 +85,6 @@ export class Customer extends BaseEntity {
   })
   status: string;
 
-  @OneToMany((type) => BookCar, (book) => book.customer_phone)
-  books: BookCar[];
+  @OneToMany(() => BookCar, (book) => book.customer)
+  book_cars: BookCar[];
 }

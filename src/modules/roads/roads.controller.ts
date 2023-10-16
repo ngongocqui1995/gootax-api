@@ -24,25 +24,28 @@ import { ENUM_MODEL } from 'src/common';
 import { BaseController } from 'src/common/base.controller';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { ROLES } from '../roles/contants/contants';
-import { CreateWardDto } from './dto/create-ward.dto';
-import { UpdateWardDto } from './dto/update-ward.dto';
-import { Ward } from './entities/ward.entity';
-import { WardsService } from './wards.service';
+import { CreateRoadDto } from './dto/create-road.dto';
+import { UpdateRoadDto } from './dto/update-road.dto';
+import { Road } from './entities/road.entity';
+import { RoadsService } from './roads.service';
 
 @Crud({
   model: {
-    type: Ward,
+    type: Road,
   },
   dto: {
-    create: CreateWardDto,
-    update: UpdateWardDto,
+    create: CreateRoadDto,
+    update: UpdateRoadDto,
   },
   query: {
     join: {
+      province: {
+        allow: undefined,
+      },
       district: {
         allow: undefined,
       },
-      province: {
+      ward: {
         allow: undefined,
       },
     },
@@ -59,17 +62,17 @@ import { WardsService } from './wards.service';
     },
   },
 })
-@ApiTags('Districts')
-@Controller('wards')
-export class WardsController implements CrudController<Ward> {
+@ApiTags('Roads')
+@Controller('roads')
+export class RoadsController implements CrudController<Road> {
   model_name: string = ENUM_MODEL.WARD;
 
   constructor(
-    public service: WardsService,
+    public service: RoadsService,
     private checkController: BaseController,
   ) {}
 
-  get base(): CrudController<Ward> {
+  get base(): CrudController<Road> {
     return this;
   }
 
@@ -97,7 +100,7 @@ export class WardsController implements CrudController<Ward> {
   coolFunction(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateWardDto,
+    @ParsedBody() dto: CreateRoadDto,
     @I18nLang() lang: string,
   ) {
     return this.service.updateOneBase(id, req, dto, lang);
@@ -113,7 +116,7 @@ export class WardsController implements CrudController<Ward> {
   awesomePUT(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateWardDto,
+    @ParsedBody() dto: CreateRoadDto,
     @I18nLang() lang: string,
   ) {
     return this.service.replaceOneBase(id, req, dto, lang);
@@ -128,7 +131,7 @@ export class WardsController implements CrudController<Ward> {
   @Override()
   createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateWardDto,
+    @ParsedBody() dto: CreateRoadDto,
     @I18nLang() lang: string,
   ) {
     return this.service.createOneBase(req, dto, lang);

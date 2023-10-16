@@ -32,6 +32,7 @@ import { CarsModule } from './modules/cars/cars.module';
 import { CompanyModule } from './modules/company/company.module';
 import { VehiclesModule } from './modules/vehicles/vehicles.module';
 import { CarStyleModule } from './modules/car-style/car-style.module';
+import { RoadsModule } from './modules/roads/roads.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { CarStyleModule } from './modules/car-style/car-style.module';
     CompanyModule,
     VehiclesModule,
     CarStyleModule,
+    RoadsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Province } from 'src/modules/provinces/entities/province.entity';
+import { Road } from 'src/modules/roads/entities/road.entity';
 import { Ward } from 'src/modules/wards/entities/ward.entity';
 import {
   Column,
@@ -71,4 +72,7 @@ export class District extends BaseEntity {
 
   @OneToMany(() => Ward, (ward) => ward.district)
   wards: Ward[];
+
+  @OneToMany(() => Road, (road) => road.district)
+  roads: Road[];
 }

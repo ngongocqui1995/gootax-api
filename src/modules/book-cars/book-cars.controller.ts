@@ -37,6 +37,38 @@ import { BookCar } from './entities/book-car.entity';
     create: CreateBookCarDto,
     update: UpdateBookCarDto,
   },
+  query: {
+    join: {
+      type_car: {
+        allow: undefined,
+      },
+      from_address_province: {
+        allow: undefined,
+      },
+      from_address_district: {
+        allow: undefined,
+      },
+      from_address_ward: {
+        allow: undefined,
+      },
+      from_address_road: {
+        allow: undefined,
+      },
+      to_address_province: {
+        allow: undefined,
+      },
+      to_address_district: {
+        allow: undefined,
+      },
+      to_address_ward: {
+        allow: undefined,
+      },
+      to_address_road: {
+        allow: undefined,
+      },
+    },
+    exclude: ['id'],
+  },
   routes: {
     exclude: ['deleteOneBase', 'createManyBase'],
   },
@@ -108,8 +140,6 @@ export class BookCarsController implements CrudController<BookCar> {
     return this.service.replaceOneBase(id, req, dto, lang);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer {{token}}',
@@ -124,8 +154,6 @@ export class BookCarsController implements CrudController<BookCar> {
   }
 
   @Put('status/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer {{token}}',

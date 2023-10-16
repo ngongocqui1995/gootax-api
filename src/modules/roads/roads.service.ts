@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, Param } from '@nestjs/common';
+import { HttpStatus, Injectable, Param, Request } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CrudRequest,
@@ -12,29 +12,29 @@ import { I18nLang } from 'nestjs-i18n';
 import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
-import { Connection } from 'typeorm';
-import { CreateBookCarDto } from './dto/create-book-car.dto';
-import { UpdateBookCarDto } from './dto/update-book-car.dto';
-import { BookCar } from './entities/book-car.entity';
+import { Connection, Not } from 'typeorm';
+import { CreateRoadDto } from './dto/create-road.dto';
+import { UpdateRoadDto } from './dto/update-road.dto';
+import { Road } from './entities/road.entity';
 
 @Injectable()
-export class BookCarsService extends TypeOrmCrudService<BookCar> {
-  model_name: string = ENUM_MODEL.BOOK_CAR;
+export class RoadsService extends TypeOrmCrudService<Road> {
+  model_name: string = ENUM_MODEL.ROAD;
   status_name: string = ENUM_MODEL.STATUS;
 
   constructor(
-    @InjectRepository(BookCar) repo,
+    @InjectRepository(Road) repo,
     private checkService: BaseService,
     private connection: Connection,
   ) {
     super(repo);
   }
 
-  get base(): CrudService<BookCar> {
+  get base(): CrudService<Road> {
     return this;
   }
 
-  async getManyBase(@ParsedRequest() req: CrudRequest) {
+  async getManyBase(@ParsedRequest() req: CrudRequest, @Request() request) {
     const { parsed, options } = req;
     const builder = await this.createBuilder(parsed, options);
 
@@ -44,25 +44,21 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
   async replaceOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateBookCarDto,
+    @ParsedBody() dto: CreateRoadDto,
     @I18nLang() lang: string,
   ) {
-    const [err] = await to(
-      this.replaceOne(req, <BookCar>{
-        ...dto,
-        type_car: { id: dto.type_car?.toString() },
-        from_address_province: { id: dto.from_address_province?.toString() },
-        from_address_district: { id: dto.from_address_district?.toString() },
-        from_address_ward: { id: dto.from_address_ward?.toString() },
-        from_address_road: { id: dto.from_address_road?.toString() },
-        to_address_province: { id: dto.to_address_province?.toString() },
-        to_address_district: { id: dto.to_address_district?.toString() },
-        to_address_ward: { id: dto.to_address_ward?.toString() },
-        to_address_road: { id: dto.to_address_road?.toString() },
-        customer: { id: dto.customer?.toString() },
-        driver: { id: dto.driver?.toString() },
-      }),
-    );
+    const codeExist = await this.findOne({
+      where: {
+        code: dto.code,
+        province: { id: dto.province.toString() },
+        district: { id: dto.district.toString() },
+        ward: { id: dto.ward.toString() },
+        id: Not(id),
+      },
+    });
+    this.checkService.checkCodeExist(!!codeExist);
+
+    const [err] = await to(this.replaceOne(req, <Road>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -85,25 +81,21 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
   async updateOneBase(
     @Param('id') id: string,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: UpdateBookCarDto,
+    @ParsedBody() dto: UpdateRoadDto,
     @I18nLang() lang: string,
   ) {
-    const [err] = await to(
-      this.updateOne(req, <BookCar>{
-        ...dto,
-        type_car: { id: dto.type_car?.toString() },
-        from_address_province: { id: dto.from_address_province?.toString() },
-        from_address_district: { id: dto.from_address_district?.toString() },
-        from_address_ward: { id: dto.from_address_ward?.toString() },
-        from_address_road: { id: dto.from_address_road?.toString() },
-        to_address_province: { id: dto.to_address_province?.toString() },
-        to_address_district: { id: dto.to_address_district?.toString() },
-        to_address_ward: { id: dto.to_address_ward?.toString() },
-        to_address_road: { id: dto.to_address_road?.toString() },
-        customer: { id: dto.customer?.toString() },
-        driver: { id: dto.driver?.toString() },
-      }),
-    );
+    const codeExist = await this.findOne({
+      where: {
+        code: dto.code,
+        province: { id: dto.province.toString() },
+        district: { id: dto.district.toString() },
+        ward: { id: dto.ward.toString() },
+        id: Not(id),
+      },
+    });
+    this.checkService.checkCodeExist(!!codeExist);
+
+    const [err] = await to(this.updateOne(req, <Road>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
     return {
       status: HttpStatus.OK,
@@ -125,25 +117,20 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
 
   async createOneBase(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: CreateBookCarDto,
+    @ParsedBody() dto: CreateRoadDto,
     @I18nLang() lang: string,
   ) {
-    const [err] = await to(
-      this.createOne(req, <BookCar>{
-        ...dto,
-        type_car: { id: dto.type_car?.toString() },
-        from_address_province: { id: dto.from_address_province?.toString() },
-        from_address_district: { id: dto.from_address_district?.toString() },
-        from_address_ward: { id: dto.from_address_ward?.toString() },
-        from_address_road: { id: dto.from_address_road?.toString() },
-        to_address_province: { id: dto.to_address_province?.toString() },
-        to_address_district: { id: dto.to_address_district?.toString() },
-        to_address_ward: { id: dto.to_address_ward?.toString() },
-        to_address_road: { id: dto.to_address_road?.toString() },
-        customer: { id: dto.customer?.toString() },
-        driver: { id: dto.driver?.toString() },
-      }),
-    );
+    const codeExist = await this.findOne({
+      where: {
+        code: dto.code,
+        province: { id: dto.province.toString() },
+        district: { id: dto.district.toString() },
+        ward: { id: dto.ward.toString() },
+      },
+    });
+    this.checkService.checkCodeExist(!!codeExist);
+
+    const [err] = await to(this.createOne(req, <Road>dto));
     if (err) this.checkService.throwErrorSystem(err.message);
 
     return {
@@ -176,7 +163,7 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
     try {
       await queryRunner.manager
         .createQueryBuilder()
-        .update(BookCar)
+        .update(Road)
         .set({ status: updateStatusDTO.status })
         .where('id = :id', { id })
         .execute();
