@@ -8,6 +8,7 @@ import {
 } from '@nestjsx/crud';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
+import axios from 'axios';
 import { I18nLang } from 'nestjs-i18n';
 import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
@@ -128,10 +129,26 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
     @ParsedBody() dto: CreateBookCarDto,
     @I18nLang() lang: string,
   ) {
+    let from_address = dto.from_address;
+    if (!from_address && dto.from_address_lat && dto.from_address_lng) {
+      const res = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json`,
+        {
+          params: {
+            key: process.env.GOOGLE_MAPS_API_KEY,
+            latlng: [dto.from_address_lat, dto.from_address_lng].toString(),
+          },
+        },
+      );
+
+      from_address = res.data?.results?.[0]?.formatted_address || '';
+    }
+
     const [err] = await to(
       this.createOne(req, <BookCar>{
         ...dto,
         type_car: { id: dto.type_car?.toString() },
+        from_address,
         from_address_province: { id: dto.from_address_province?.toString() },
         from_address_district: { id: dto.from_address_district?.toString() },
         from_address_ward: { id: dto.from_address_ward?.toString() },

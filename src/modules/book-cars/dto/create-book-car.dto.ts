@@ -57,6 +57,7 @@ export class CreateBookCarDto {
   })
   type_car: TypeCar;
 
+  @IsOptional()
   @IsString({ message: 'errors.NAME_STRING' })
   @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
   @ApiProperty({
@@ -69,7 +70,6 @@ export class CreateBookCarDto {
   })
   from_address: string;
 
-  @IsOptional()
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
@@ -80,7 +80,6 @@ export class CreateBookCarDto {
   })
   from_address_lat: Number;
 
-  @IsOptional()
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty({
@@ -179,6 +178,7 @@ export class CreateBookCarDto {
   })
   to_address_lng: Number;
 
+  @IsOptional()
   @IsString({ message: 'errors.PHONE_STRING' })
   @IsNotEmpty({ message: 'errors.PHONE_NOT_EMPTY' })
   @Transform((params) => String(params.value).trim())
