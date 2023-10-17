@@ -704,6 +704,11 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@nestjs/axios@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/axios/-/axios-3.0.0.tgz#a2e70b118e3058f3d4b9c3deacd496ec4e3ee69e"
+  integrity sha512-ULdH03jDWkS5dy9X69XbUVbhC+0pVnrRcj7bIK/ytTZ76w7CgvTZDJqsIyisg3kNOiljRW/4NIjSf3j6YGvl+g==
+
 "@nestjs/cli@^10.0.0":
   version "10.1.17"
   resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-10.1.17.tgz"
@@ -828,34 +833,35 @@
   dependencies:
     uuid "9.0.0"
 
-"@nestjsx/crud-request@^4.6.2":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@nestjsx/crud-request/-/crud-request-4.6.2.tgz#c0d29df354b3de648a44dc0973f80131c953af86"
-  integrity sha512-EqveTzR5JLMRBnxqJzo0mm7Ff05IzQ6dvfg1gj46q6nOwZ0hfXr0FBTChtciKtkZB/QOlWQ5B1scCap/QuNJWQ==
+"@nestjsx/crud-request@^5.0.0-alpha.3":
+  version "5.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@nestjsx/crud-request/-/crud-request-5.0.0-alpha.3.tgz#ee62f5ff454daef4973990faf9d1568e2a4b9bc8"
+  integrity sha512-EFeGgh/sSHhD3px9aj4hyjvOqBepMcRFAi5lrYuSUDmnj/eQOa4dg4orehU8gKrSAmgKNe9r0dx0kel7Zgivzg==
   dependencies:
-    "@nestjsx/util" "^4.6.2"
+    "@nestjsx/util" "^5.0.0-alpha.3"
     qs "^6.8.0"
 
-"@nestjsx/crud-typeorm@^4.6.2":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@nestjsx/crud-typeorm/-/crud-typeorm-4.6.2.tgz#8d36b07b139489133545673af2209d2f1ce3d4fa"
-  integrity sha512-RHJlxz9QrLauaCtgRp0C2o38WVLbcZzvFWjHOpsSa8Pti74lUppphiAvlSaOnoMjOtlSCYcHJ954ynKcy0GwLA==
+"@nestjsx/crud-typeorm@^5.0.0-alpha.3":
+  version "5.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@nestjsx/crud-typeorm/-/crud-typeorm-5.0.0-alpha.3.tgz#069dedb5cc82fd4749082594b5f6952c160fcd51"
+  integrity sha512-9FN4iBELmhhSoVJj8457kaNGFKhm7IA7zJbLJRGuIb0+12WwCOhY0/bhMg1pWgZ1qUYtkYoELyMiMDroPPtARw==
   dependencies:
     "@zmotivat0r/o0" "^1.0.2"
 
-"@nestjsx/crud@^4.6.2":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@nestjsx/crud/-/crud-4.6.2.tgz#7b6c3e8642f44f6113e7d9945aa397bbda334b26"
-  integrity sha512-WWzPI7X2saxJ2No5vO4+zaSRP4CABqSM4NGVAE1VjGQ1ApdjDxj3dFu08Y7YSa5kz+vmrVRwh++Vh+xd9MixUQ==
+"@nestjsx/crud@^5.0.0-alpha.3":
+  version "5.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@nestjsx/crud/-/crud-5.0.0-alpha.3.tgz#84d494ceb5b10135afe53c62ed2a0e8015522f8b"
+  integrity sha512-LPFtrrE4nGT1vvzM+IpA4CNazO67Tz8gc4lAfSjwujIeOHPGfj3vJKUlcU/ESRUW/t+bLOF3S1tY/N0GQ/SRyg==
   dependencies:
-    "@nestjsx/crud-request" "^4.6.2"
-    "@nestjsx/util" "^4.6.2"
+    "@nestjsx/crud-request" "^5.0.0-alpha.3"
+    "@nestjsx/util" "^5.0.0-alpha.3"
     deepmerge "^3.2.0"
+    pluralize "^8.0.0"
 
-"@nestjsx/util@^4.6.2":
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/@nestjsx/util/-/util-4.6.2.tgz#89bd31447a30f9666d7ad1616111c78b2d61dd56"
-  integrity sha512-YG2gQvSm7p8zBFaW6MFM5r1Ihk4Vr189SB2OTr7fV7qcjPS+02v7xILw2dTz2emdmu0t0AgCL2RU1V0lY8Aa9w==
+"@nestjsx/util@^5.0.0-alpha.3":
+  version "5.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@nestjsx/util/-/util-5.0.0-alpha.3.tgz#d1182280e9254f0d335efa369da17fa25d260135"
+  integrity sha512-UTYIxtyx80M42gOZ0VIInSiOLn78P6k1BCziiN8gE3FglzivQ1RGvPpmsRwioYEWG27gOgnMwOQnXv8Zbq8dzQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1608,10 +1614,10 @@ axios@^0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.npmjs.org/axios/-/axios-1.5.0.tgz"
-  integrity sha512-D4DdjDo5CY50Qms0qGQTTw6Q44jl7zRwY7bthds06pUGfChBCTcQs+N743eFWGEd6pRTMd6A+I87aWyFV5wiZQ==
+axios@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.5.1.tgz#11fbaa11fc35f431193a9564109c88c1f27b585f"
+  integrity sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -4636,9 +4642,9 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-pluralize@8.0.0:
+pluralize@8.0.0, pluralize@^8.0.0:
   version "8.0.0"
-  resolved "https://registry.npmjs.org/pluralize/-/pluralize-8.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
   integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
 
 postgres-array@~2.0.0:
