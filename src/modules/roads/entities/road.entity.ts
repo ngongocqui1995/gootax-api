@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { BookCar } from 'src/modules/book-cars/entities/book-car.entity';
 import { District } from 'src/modules/districts/entities/district.entity';
 import { Province } from 'src/modules/provinces/entities/province.entity';
 import { Ward } from 'src/modules/wards/entities/ward.entity';
@@ -9,6 +10,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -106,4 +108,10 @@ export class Road extends BaseEntity {
     enum: ['ACTIVE', 'INACTIVE'],
   })
   status: string;
+
+  @OneToMany(() => BookCar, (book_car) => book_car.from_address_road)
+  from_address_book_cars: BookCar[];
+
+  @OneToMany(() => BookCar, (book_car) => book_car.to_address_road)
+  to_address_book_cars: BookCar[];
 }

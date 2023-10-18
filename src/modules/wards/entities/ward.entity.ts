@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { BookCar } from 'src/modules/book-cars/entities/book-car.entity';
 import { District } from 'src/modules/districts/entities/district.entity';
 import { Province } from 'src/modules/provinces/entities/province.entity';
 import { Road } from 'src/modules/roads/entities/road.entity';
@@ -90,4 +91,10 @@ export class Ward extends BaseEntity {
 
   @OneToMany(() => Road, (road) => road.ward)
   roads: Road[];
+
+  @OneToMany(() => BookCar, (book_car) => book_car.from_address_ward)
+  from_address_book_cars: BookCar[];
+
+  @OneToMany(() => BookCar, (book_car) => book_car.to_address_ward)
+  to_address_book_cars: BookCar[];
 }

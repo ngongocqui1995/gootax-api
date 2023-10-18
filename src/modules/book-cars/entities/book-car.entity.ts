@@ -13,7 +13,6 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -46,10 +45,16 @@ export class BookCar extends BaseEntity {
   @Column({ type: 'varchar', nullable: true, length: 20 })
   phone: string;
 
-  @OneToOne(() => TypeCar, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Type Car Id',
+    example: '1',
+  })
+  @ManyToOne(() => TypeCar, (type_car) => type_car.book_cars, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'type_car_id' })
   type_car: TypeCar;
 
   @ApiProperty({
@@ -75,28 +80,52 @@ export class BookCar extends BaseEntity {
   @Column({ type: 'float', nullable: true })
   from_address_lng: Number;
 
-  @OneToOne(() => Province, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Province Id',
+    example: '1',
+  })
+  @ManyToOne(() => Province, (province) => province.from_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'from_address_province_id' })
   from_address_province: Province;
 
-  @OneToOne(() => District, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'District Id',
+    example: '1',
+  })
+  @ManyToOne(() => District, (district) => district.from_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
-  from_address_district: District;
+  @JoinColumn({ name: 'from_address_district_id' })
+  from_address_district: Province;
 
-  @OneToOne(() => Ward, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Ward Id',
+    example: '1',
+  })
+  @ManyToOne(() => Ward, (ward) => ward.from_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'from_address_ward_id' })
   from_address_ward: Ward;
 
-  @OneToOne(() => Road, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Road Id',
+    example: '1',
+  })
+  @ManyToOne(() => Road, (road) => road.from_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'from_address_road_id' })
   from_address_road: Road;
 
   @ApiProperty({
@@ -122,28 +151,52 @@ export class BookCar extends BaseEntity {
   @Column({ type: 'float', nullable: true })
   to_address_lng: Number;
 
-  @OneToOne(() => Province, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Province Id',
+    example: '1',
+  })
+  @ManyToOne(() => Province, (province) => province.to_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'to_address_province_id' })
   to_address_province: Province;
 
-  @OneToOne(() => District, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'District Id',
+    example: '1',
+  })
+  @ManyToOne(() => District, (district) => district.to_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'to_address_district_id' })
   to_address_district: District;
 
-  @OneToOne(() => Ward, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Ward Id',
+    example: '1',
+  })
+  @ManyToOne(() => Ward, (ward) => ward.to_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'to_address_ward_id' })
   to_address_ward: Ward;
 
-  @OneToOne(() => Road, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Road Id',
+    example: '1',
+  })
+  @ManyToOne(() => Road, (road) => road.to_address_book_cars, {
     nullable: true,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'to_address_road_id' })
   to_address_road: Road;
 
   @ApiProperty({
@@ -167,15 +220,15 @@ export class BookCar extends BaseEntity {
   driver: Driver;
 
   @ApiProperty({
-    enum: ['ACTIVE', 'INACTIVE'],
-    description: 'ACTIVE',
-    example: 'ACTIVE',
+    enum: ['INIT', 'DRIVER_ACCEPTED', 'CANCEL', 'DONE'],
+    description: 'INIT',
+    example: 'INIT',
   })
   @Column({
     type: 'varchar',
     nullable: false,
-    default: 'ACTIVE',
-    enum: ['ACTIVE', 'INACTIVE'],
+    default: 'INIT',
+    enum: ['INIT', 'DRIVER_ACCEPTED', 'CANCEL', 'DONE'],
   })
   status: string;
 }
