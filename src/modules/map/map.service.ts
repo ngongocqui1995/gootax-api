@@ -14,8 +14,9 @@ export class MapService {
         params: {
           key: process.env.GOOGLE_MAPS_API_KEY,
           query: query.address,
+          location: query.location,
           language: 'vi',
-          radius: 100,
+          radius: 6000,
         },
       },
     );
