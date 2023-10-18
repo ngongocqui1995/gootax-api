@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Car } from 'src/modules/cars/entities/car.entity';
 import { Company } from 'src/modules/company/entities/company.entity';
 import {
   Column,
@@ -7,6 +8,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -40,6 +42,9 @@ export class Vehicle extends BaseEntity {
   })
   @Column({ type: 'varchar', nullable: false, length: 50 })
   name: string;
+
+  @OneToMany(() => Car, (car) => car.vehicle)
+  cars: Car[];
 
   @ApiProperty({
     type: String,

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Car } from 'src/modules/cars/entities/car.entity';
 import { Vehicle } from 'src/modules/vehicles/entities/vehicle.entity';
 import {
   Column,
@@ -40,6 +41,9 @@ export class Company extends BaseEntity {
 
   @OneToMany(() => Vehicle, (vehicle) => vehicle.company)
   vehicles: Vehicle[];
+
+  @OneToMany(() => Car, (car) => car.company)
+  cars: Car[];
 
   @ApiProperty({
     enum: ['ACTIVE', 'INACTIVE'],

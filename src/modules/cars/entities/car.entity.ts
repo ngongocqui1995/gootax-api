@@ -10,8 +10,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -60,28 +60,52 @@ export class Car extends BaseEntity {
   @Column({ type: 'int', nullable: false })
   seat: Number;
 
-  @OneToOne(() => Company, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Company Id',
+    example: '1',
+  })
+  @ManyToOne(() => Company, (company) => company.cars, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'company_id' })
   company: Company;
 
-  @OneToOne(() => CarStyle, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Car Style Id',
+    example: '1',
+  })
+  @ManyToOne(() => CarStyle, (car_style) => car_style.cars, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'car_style_id' })
   car_style: CarStyle;
 
-  @OneToOne(() => Vehicle, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Vehicle Id',
+    example: '1',
+  })
+  @ManyToOne(() => Vehicle, (vehicle) => vehicle.cars, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'vehicle_id' })
   vehicle: Vehicle;
 
-  @OneToOne(() => TypeCar, {
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'Type Car Id',
+    example: '1',
+  })
+  @ManyToOne(() => TypeCar, (type_car) => type_car.cars, {
     nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'type_car_id' })
   type_car: TypeCar;
 
   @OneToMany(() => Driver, (driver) => driver.car)
