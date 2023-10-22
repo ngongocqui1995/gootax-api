@@ -216,19 +216,67 @@ export class BookCar extends BaseEntity {
     example: '1',
   })
   @ManyToOne(() => Driver, (driver) => driver.book_cars)
-  @JoinColumn({ name: 'driver' })
+  @JoinColumn({ name: 'driver_id' })
   driver: Driver;
 
   @ApiProperty({
-    enum: ['INIT', 'DRIVER_ACCEPTED', 'CANCEL', 'DONE'],
+    enum: ['INIT', 'FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
     description: 'INIT',
     example: 'INIT',
   })
   @Column({
     type: 'varchar',
     nullable: false,
-    default: 'INIT',
-    enum: ['INIT', 'DRIVER_ACCEPTED', 'CANCEL', 'DONE'],
+    default: 'FINDING',
+    enum: ['FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
   })
   status: string;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Start Time',
+    example: '',
+  })
+  @Column({ type: 'timestamp', nullable: true })
+  startTime: Date;
+
+  @ApiProperty({
+    type: Date,
+    description: 'End Time',
+    example: '',
+  })
+  @Column({ type: 'timestamp', nullable: true })
+  endTime: Date;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Amount',
+    example: '330000',
+  })
+  @Column({ type: 'float', nullable: false, default: 0 })
+  amount: number;
+
+  @ApiProperty({
+    type: Number,
+    description: 'Distance',
+    example: '2800',
+  })
+  @Column({ type: 'float', nullable: false, default: 0 })
+  distance: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'Note',
+    example: 'Có trẻ em',
+  })
+  @Column({ type: 'varchar', nullable: true })
+  note: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Payment method',
+    enum: ['CASH', 'CARD'],
+  })
+  @Column({ type: 'varchar', nullable: false, default: 'CASH' })
+  paymentMethod: number;
 }

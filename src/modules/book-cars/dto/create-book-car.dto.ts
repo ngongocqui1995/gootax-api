@@ -274,4 +274,35 @@ export class CreateBookCarDto {
     required: false,
   })
   status: string;
+
+  @IsOptional()
+  @IsNotEmpty({ message: 'Số tiền không được trống' })
+  @ApiProperty({
+    type: Number,
+    required: true,
+    description: 'Amount',
+    example: 120000,
+  })
+  amount: number;
+
+  @IsOptional()
+  @IsNotEmpty({ message: 'Khoảng cách không được rỗng' })
+  @ApiProperty({
+    type: Number,
+    required: true,
+    description: 'Distance',
+    example: 12000,
+  })
+  distance: number;
+
+  @IsOptional()
+  @IsNotEmpty({ message: 'errors.NAME_NOT_EMPTY' })
+  @Length(3, 150, { message: 'Ghi chú ngắn thôi...' })
+  @ApiProperty({
+    type: String,
+    required: false,
+    description: 'Note',
+    example: '',
+  })
+  note: string;
 }

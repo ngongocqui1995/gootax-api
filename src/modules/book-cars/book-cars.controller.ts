@@ -66,6 +66,15 @@ import { BookCar } from './entities/book-car.entity';
       to_address_road: {
         allow: undefined,
       },
+      amount: {
+        allow: undefined,
+      },
+      distance: {
+        allow: undefined,
+      },
+      note: {
+        allow: undefined,
+      },
     },
     exclude: ['id'],
   },

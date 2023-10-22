@@ -131,17 +131,17 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
   ) {
     let from_address = dto.from_address;
     if (!from_address && dto.from_address_lat && dto.from_address_lng) {
-      const res = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json`,
-        {
-          params: {
-            key: process.env.GOOGLE_MAPS_API_KEY,
-            latlng: [dto.from_address_lat, dto.from_address_lng].toString(),
-          },
-        },
-      );
+      // const res = await axios.get(
+      //   `https://maps.googleapis.com/maps/api/geocode/json`,
+      //   {
+      //     params: {
+      //       key: process.env.GOOGLE_MAPS_API_KEY,
+      //       latlng: [dto.from_address_lat, dto.from_address_lng].toString(),
+      //     },
+      //   },
+      // );
 
-      from_address = res.data?.results?.[0]?.formatted_address || '';
+      // from_address = res.data?.results?.[0]?.formatted_address || '';
     }
 
     const [err] = await to(

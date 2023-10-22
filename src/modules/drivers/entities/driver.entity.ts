@@ -102,4 +102,10 @@ export class Driver extends BaseEntity {
 
   @OneToMany(() => BookCar, (book) => book.driver)
   book_cars: BookCar[];
+
+  @Column({ type: 'float', nullable: true })
+  current_lat: number;
+
+  @Column({ type: 'float', nullable: true })
+  current_lng: number;
 }

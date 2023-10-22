@@ -57,7 +57,7 @@ export class Car extends BaseEntity {
     description: 'Admin',
     example: 'Admin',
   })
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', nullable: true })
   seat: Number;
 
   @ApiProperty({
@@ -123,4 +123,13 @@ export class Car extends BaseEntity {
     enum: ['ACTIVE', 'INACTIVE'],
   })
   status: string;
+
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: 'License Plate',
+    example: '51G-12345',
+  })
+  @Column({ type: 'varchar', nullable: false, default: '51X-XXXXX' })
+  licensePlate: string;
 }
