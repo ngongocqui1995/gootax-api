@@ -54,12 +54,6 @@ export class UsersService extends TypeOrmCrudService<User> {
     const user: User = request.user;
     const builder = await this.createBuilder(parsed, options);
 
-    // console.log(
-    //   parsed.filter,
-    //   JSON.stringify(parsed.search.$and, null, 2),
-    //   request.url,
-    // );
-
     switch (user.role.code) {
       case ROLES.ROLE_ADMIN: {
         builder.andWhere(`"role"."code" != :code`, { code: ROLES.ROLE_ROOT });
