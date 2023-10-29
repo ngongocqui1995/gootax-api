@@ -6,7 +6,7 @@ import { TypeCarsService } from '../type-cars/type-cars.service';
 export class MapController {
   constructor(
     private readonly mapService: MapService,
-    private typeCarService: TypeCarsService
+    private typeCarService: TypeCarsService,
   ) {}
 
   @Get()
@@ -30,7 +30,6 @@ export class MapController {
       amount: 0,
       distance,
     };
-    console.log(car);
     switch (car.code) {
       case 'XE-4-CHO':
         res.amount = Math.ceil((distance * 14) / 1000) * 1000;

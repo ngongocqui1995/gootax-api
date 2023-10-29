@@ -114,7 +114,6 @@ export class CarsService extends TypeOrmCrudService<Car> {
     @ParsedBody() dto: CreateCarDto,
     @I18nLang() lang: string,
   ) {
-    console.log(dto);
     const [err] = await to(
       this.createOne(req, <Car>{
         ...dto,

@@ -16,7 +16,7 @@ export class MapService {
           key: process.env.GOOGLE_MAPS_API_KEY,
           input: query.address,
           inputtype: 'textquery',
-          fields: 'formatted_address,geometry',
+          fields: 'place_id,formatted_address,geometry',
           // bias locations in 20km from center of HCMC
           locationbias: 'circle:20000@10.773100,106.684394',
         },
@@ -25,7 +25,12 @@ export class MapService {
     return res.data;
   }
 
-  async getRoute(from_lat: number, from_lng: number, to_lat: number, to_lng: number) {
+  async getRoute(
+    from_lat: number,
+    from_lng: number,
+    to_lat: number,
+    to_lng: number,
+  ) {
     const res = await this.httpService.axiosRef.get(
       `https://maps.googleapis.com/maps/api/directions/json`,
       {
@@ -38,13 +43,12 @@ export class MapService {
       },
     );
     return res.data;
-  };
+  }
 
   interceptor() {
-    this.httpService.axiosRef.interceptors.request.use(request => {
-      console.log('Starting Request', JSON.stringify(request, null, 2));
+    this.httpService.axiosRef.interceptors.request.use((request) => {
+      // console.log('Starting Request', JSON.stringify(request, null, 2));
       return request;
-    })
-    
+    });
   }
 }

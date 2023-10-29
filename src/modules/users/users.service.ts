@@ -54,11 +54,11 @@ export class UsersService extends TypeOrmCrudService<User> {
     const user: User = request.user;
     const builder = await this.createBuilder(parsed, options);
 
-    console.log(
-      parsed.filter,
-      JSON.stringify(parsed.search.$and, null, 2),
-      request.url,
-    );
+    // console.log(
+    //   parsed.filter,
+    //   JSON.stringify(parsed.search.$and, null, 2),
+    //   request.url,
+    // );
 
     switch (user.role.code) {
       case ROLES.ROLE_ADMIN: {
