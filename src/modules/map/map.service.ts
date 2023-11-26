@@ -16,6 +16,7 @@ export class MapService {
           key: process.env.GOOGLE_MAPS_API_KEY,
           input: query.address,
           inputtype: 'textquery',
+          language: 'vi',
           fields: 'place_id,formatted_address,geometry,name',
           // bias locations in 20km from center of HCMC
           locationbias: 'circle:20000@10.773100,106.684394',
