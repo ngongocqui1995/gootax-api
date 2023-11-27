@@ -103,8 +103,6 @@ export class BookCarsController implements CrudController<BookCar> {
     return this;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @RequireRoles(ROLES.ROLE_ADMIN)
   @Override()
   getMany(@ParsedRequest() req) {
     return this.service.getManyBase(req);
