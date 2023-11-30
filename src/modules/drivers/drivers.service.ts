@@ -16,6 +16,7 @@ import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
 import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
+import { ChangeLocationDTO } from './dto/change-location.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
@@ -200,11 +201,7 @@ export class DriversService extends TypeOrmCrudService<Driver> {
     };
   }
 
-  async changePassword(
-    @Request() req,
-    changePasswordDTO: ChangePasswordDTO,
-    @I18nLang() lang: string,
-  ) {
+  async changePassword(@Request() req, changePasswordDTO: ChangePasswordDTO) {
     // verify user password
     const user = await this.findOne({ where: { id: req.user.id } });
     const matchedPassword = await this.hashService.comparePassword(
@@ -229,6 +226,36 @@ export class DriversService extends TypeOrmCrudService<Driver> {
         .createQueryBuilder()
         .update(Driver)
         .set({ password: encryptedPassword })
+        .where('id = :id', { id: req.user.id })
+        .execute();
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.checkService.throwErrorSystem(err.message);
+    } finally {
+      await queryRunner.release();
+    }
+    return {
+      status: HttpStatus.OK,
+      message: await this.checkService.i18n.translate(
+        'messages.RESET_PASSWORD.PASSWORD_CHANGED',
+      ),
+    };
+  }
+
+  async changeLocation(@Request() req, changeLocation: ChangeLocationDTO) {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager
+        .createQueryBuilder()
+        .update(Driver)
+        .set({
+          current_lat: changeLocation.current_lat,
+          current_lng: changeLocation.current_lng,
+        })
         .where('id = :id', { id: req.user.id })
         .execute();
 

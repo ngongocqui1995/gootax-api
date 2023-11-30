@@ -27,6 +27,7 @@ import { ROLES } from '../roles/contants/contants';
 import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
 import { DriversService } from './drivers.service';
+import { ChangeLocationDTO } from './dto/change-location.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
@@ -180,7 +181,21 @@ export class DriversController implements CrudController<Driver> {
     @Body(ValidationPipe) changePasswordDTO: ChangePasswordDTO,
     @I18nLang() lang: string,
   ) {
-    return this.service.changePassword(req, changePasswordDTO, lang);
+    return this.service.changePassword(req, changePasswordDTO);
+  }
+
+  @Put('change-location')
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer {{token}}',
+  })
+  async changeLocation(
+    @Request() req,
+    @Body(ValidationPipe) changeLocation: ChangeLocationDTO,
+    @I18nLang() lang: string,
+  ) {
+    return this.service.changeLocation(req, changeLocation);
   }
 
   @Put('update-email/change-password')

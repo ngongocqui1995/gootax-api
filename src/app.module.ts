@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AcceptLanguageResolver,
@@ -15,29 +16,32 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AllExceptionsFilter } from './common/i18n/exceptions-filter';
 import configuration from './config/orm.config';
-import { CustomersModule } from './modules/customers/customers.module';
-import { DriversModule } from './modules/drivers/drivers.module';
-import { MenusModule } from './modules/menus/menus.module';
-import { PermissionModule } from './modules/permission/permission.module';
-import { RoleToMenuModule } from './modules/role-to-menu/role-to-menu.module';
-import { RolesModule } from './modules/roles/roles.module';
-import { UploadsModule } from './modules/uploads/uploads.module';
-import { UsersModule } from './modules/users/users.module';
+import { EventModule } from './event/event.module';
 import { BookCarsModule } from './modules/book-cars/book-cars.module';
-import { ProvincesModule } from './modules/provinces/provinces.module';
-import { DistrictsModule } from './modules/districts/districts.module';
-import { WardsModule } from './modules/wards/wards.module';
-import { TypeCarsModule } from './modules/type-cars/type-cars.module';
+import { CarStyleModule } from './modules/car-style/car-style.module';
 import { CarsModule } from './modules/cars/cars.module';
 import { CompanyModule } from './modules/company/company.module';
-import { VehiclesModule } from './modules/vehicles/vehicles.module';
-import { CarStyleModule } from './modules/car-style/car-style.module';
-import { RoadsModule } from './modules/roads/roads.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { DistrictsModule } from './modules/districts/districts.module';
+import { DriversModule } from './modules/drivers/drivers.module';
 import { MapModule } from './modules/map/map.module';
+import { MenusModule } from './modules/menus/menus.module';
+import { PermissionModule } from './modules/permission/permission.module';
+import { ProvincesModule } from './modules/provinces/provinces.module';
+import { RoadsModule } from './modules/roads/roads.module';
+import { RoleToMenuModule } from './modules/role-to-menu/role-to-menu.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { TypeCarsModule } from './modules/type-cars/type-cars.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
+import { UsersModule } from './modules/users/users.module';
+import { VehiclesModule } from './modules/vehicles/vehicles.module';
+import { WardsModule } from './modules/wards/wards.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(configuration().database),
     I18nModule.forRoot({
       fallbackLanguage: process.env.DEFAULT_LANGUAGE,
@@ -76,6 +80,8 @@ import { MapModule } from './modules/map/map.module';
     CarStyleModule,
     RoadsModule,
     MapModule,
+    EventModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [

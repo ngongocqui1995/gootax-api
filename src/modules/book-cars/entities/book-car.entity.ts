@@ -72,13 +72,13 @@ export class BookCar extends BaseEntity {
     type: Number,
   })
   @Column({ type: 'float', nullable: true })
-  from_address_lat: Number;
+  from_address_lat: number;
 
   @ApiProperty({
     type: Number,
   })
   @Column({ type: 'float', nullable: true })
-  from_address_lng: Number;
+  from_address_lng: number;
 
   @ApiProperty({
     type: String,
@@ -220,9 +220,10 @@ export class BookCar extends BaseEntity {
   driver: Driver;
 
   @ApiProperty({
-    enum: ['INIT', 'FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
-    description: 'INIT',
-    example: 'INIT',
+    type: String,
+    enum: ['FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
+    description: 'FINDING',
+    example: 'FINDING',
   })
   @Column({
     type: 'varchar',
