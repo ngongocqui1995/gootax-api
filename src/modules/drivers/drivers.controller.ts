@@ -184,7 +184,7 @@ export class DriversController implements CrudController<Driver> {
     return this.service.changePassword(req, changePasswordDTO);
   }
 
-  @Put('change-location')
+  @Put('update/change-location')
   @UseGuards(JwtAuthGuard)
   @ApiHeader({
     name: 'Authorization',
@@ -193,7 +193,6 @@ export class DriversController implements CrudController<Driver> {
   async changeLocation(
     @Request() req,
     @Body(ValidationPipe) changeLocation: ChangeLocationDTO,
-    @I18nLang() lang: string,
   ) {
     return this.service.changeLocation(req, changeLocation);
   }
