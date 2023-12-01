@@ -9,7 +9,6 @@ import {
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
-import { PasswordHasherService } from 'src/auth/password-hasher/password-hasher.service';
 import { ENUM_MODEL, ENUM_STATUS_BOOK } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { Connection } from 'typeorm';
@@ -26,7 +25,6 @@ export class DriverCancelService extends TypeOrmCrudService<DriverCancel> {
   constructor(
     @InjectRepository(DriverCancel) repo,
     private checkService: BaseService,
-    private hashService: PasswordHasherService,
     private connection: Connection,
   ) {
     super(repo);
