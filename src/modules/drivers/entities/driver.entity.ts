@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { BookCar } from 'src/modules/book-cars/entities/book-car.entity';
 import { Car } from 'src/modules/cars/entities/car.entity';
+import { DriverCancel } from 'src/modules/driver-cancel/entities/driver-cancel.entity';
 import {
   Column,
   Entity,
@@ -99,6 +100,9 @@ export class Driver extends BaseEntity {
   })
   @JoinColumn({ name: 'car_id' })
   car: Car;
+
+  @OneToMany(() => DriverCancel, (driver) => driver.driverId)
+  book_cancel: DriverCancel[];
 
   @OneToMany(() => BookCar, (book) => book.driver)
   book_cars: BookCar[];

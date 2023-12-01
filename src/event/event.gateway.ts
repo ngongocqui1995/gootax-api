@@ -9,7 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { EventChatDTO, TicketEventType } from './dto/event-chat.dto';
 
-@WebSocketGateway({ transports: ['websocket'] })
+@WebSocketGateway()
 @Injectable()
 export class EventsGateway {
   @WebSocketServer()
@@ -19,7 +19,7 @@ export class EventsGateway {
   async handleEvent(
     @MessageBody() data: EventChatDTO,
     @ConnectedSocket() client: Socket,
-  ): Promise<void> {
+  ): Promise<boolean> {
     switch (data.cmd_type) {
       case TicketEventType.MESSAGE:
         client.broadcast.to(data.room_id).emit('message', {
@@ -27,13 +27,13 @@ export class EventsGateway {
           room_id: data.room_id,
           message: data.message,
         });
-        break;
+        return true;
       case TicketEventType.JOIN:
         client.join(data.room_id);
-        break;
+        return true;
       case TicketEventType.LEAVE:
         client.leave(data.room_id);
-        break;
+        return true;
     }
   }
 }

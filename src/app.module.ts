@@ -37,6 +37,7 @@ import { UsersModule } from './modules/users/users.module';
 import { VehiclesModule } from './modules/vehicles/vehicles.module';
 import { WardsModule } from './modules/wards/wards.module';
 import { TaskModule } from './task/task.module';
+import { DriverCancelModule } from './modules/driver-cancel/driver-cancel.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { TaskModule } from './task/task.module';
     MapModule,
     EventModule,
     TaskModule,
+    DriverCancelModule,
   ],
   controllers: [AppController],
   providers: [

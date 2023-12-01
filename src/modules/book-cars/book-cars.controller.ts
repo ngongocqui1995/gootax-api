@@ -75,6 +75,9 @@ import { BookCar } from './entities/book-car.entity';
       note: {
         allow: undefined,
       },
+      driver_cancel: {
+        allow: undefined,
+      },
     },
     exclude: ['id'],
   },

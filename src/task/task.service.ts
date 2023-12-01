@@ -17,6 +17,8 @@ export class TaskService {
     private bookCarService: BookCarsService,
   ) {}
 
+  private socket = io(`http://localhost:${process.env.APP_PORT}`);
+
   getDistance(
     p1: { lat: number; lng: number },
     p2: { lat: number; lng: number },
@@ -37,43 +39,64 @@ export class TaskService {
   }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
-  async handleBookCar() {
+  handleBookCar() {
     if (!isBookCar) {
-      console.log(`http://localhost:${process.env.APP_PORT}`);
-      const socket = io(`http://localhost:${process.env.APP_PORT}`);
-      const C = 0.036;
+      const socket = io(`${process.env.HOST}:${process.env.APP_PORT}`);
+      const C = 0.04;
+      const allow_distance = 5000;
       isBookCar = true;
 
-      const bookCars = await this.bookCarService.find({
-        where: { driver: null, status: 'FINDING' },
-      });
-
-      for await (const book of bookCars) {
-        const drivers = await this.driverService.find({
-          where: {
-            current_lat: Between(
-              book.from_address_lat - C,
-              book.from_address_lat + C,
-            ),
-            current_lng: Between(
-              book.from_address_lng - C,
-              book.from_address_lng + C,
-            ),
+      socket.on('connect', async () => {
+        const bookCars = await this.bookCarService.find({
+          where: { driver: null, status: 'FINDING' },
+          relations: {
+            driver_cancel: true,
           },
         });
 
-        for await (const driver of drivers) {
-          socket.on('connect', () => {
-            socket.emit('message', {
-              cmd_type: TicketEventType.MESSAGE,
-              room_id: driver.id,
-              message: book,
-            });
+        for await (const book of bookCars) {
+          const drivers = await this.driverService.find({
+            where: {
+              current_lat: Between(
+                book.from_address_lat - C,
+                book.from_address_lat + C,
+              ),
+              current_lng: Between(
+                book.from_address_lng - C,
+                book.from_address_lng + C,
+              ),
+            },
           });
-        }
-      }
 
-      isBookCar = false;
+          for await (const driver of drivers) {
+            const distance = this.getDistance(
+              { lat: book.from_address_lat, lng: book.from_address_lng },
+              { lat: driver.current_lat, lng: driver.current_lng },
+            );
+            if (distance > allow_distance) continue;
+
+            await new Promise((resolve) => {
+              socket.emit(
+                'message',
+                {
+                  cmd_type: TicketEventType.MESSAGE,
+                  room_id: driver.id,
+                  message: book,
+                },
+                (value) => {
+                  resolve(value);
+                },
+              );
+            });
+          }
+        }
+
+        socket.disconnect();
+      });
+
+      socket.on('disconnect', () => {
+        isBookCar = false;
+      });
     }
   }
 }

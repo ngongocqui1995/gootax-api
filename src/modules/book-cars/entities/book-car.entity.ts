@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
+import { ENUM_STATUS_BOOK } from 'src/common';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Customer } from 'src/modules/customers/entities/customer.entity';
 import { District } from 'src/modules/districts/entities/district.entity';
+import { DriverCancel } from 'src/modules/driver-cancel/entities/driver-cancel.entity';
 import { Driver } from 'src/modules/drivers/entities/driver.entity';
 import { Province } from 'src/modules/provinces/entities/province.entity';
 import { Road } from 'src/modules/roads/entities/road.entity';
@@ -13,6 +15,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -56,6 +59,9 @@ export class BookCar extends BaseEntity {
   })
   @JoinColumn({ name: 'type_car_id' })
   type_car: TypeCar;
+
+  @OneToMany(() => DriverCancel, (driver) => driver.bookCarId)
+  driver_cancel: DriverCancel[];
 
   @ApiProperty({
     type: String,
@@ -221,7 +227,7 @@ export class BookCar extends BaseEntity {
 
   @ApiProperty({
     type: String,
-    enum: ['FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
+    enum: ENUM_STATUS_BOOK,
     description: 'FINDING',
     example: 'FINDING',
   })
@@ -229,7 +235,7 @@ export class BookCar extends BaseEntity {
     type: 'varchar',
     nullable: false,
     default: 'FINDING',
-    enum: ['FINDING', 'PICKING', 'RIDING', 'CANCELED', 'COMPLETED'],
+    enum: ENUM_STATUS_BOOK,
   })
   status: string;
 
