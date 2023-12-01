@@ -17,8 +17,6 @@ export class TaskService {
     private bookCarService: BookCarsService,
   ) {}
 
-  private socket = io(`http://localhost:${process.env.APP_PORT}`);
-
   getDistance(
     p1: { lat: number; lng: number },
     p2: { lat: number; lng: number },
