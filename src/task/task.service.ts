@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import { TicketEventType } from 'src/event/dto/event-chat.dto';
 import { BookCarsService } from 'src/modules/book-cars/book-cars.service';
 import { DriversService } from 'src/modules/drivers/drivers.service';
-import { Between, In, IsNull, Not } from 'typeorm';
+import { And, Between, In, IsNull, Not, Raw } from 'typeorm';
 
 let isBookCar = false;
 let isCancelBookCar = false;
@@ -58,11 +58,16 @@ export class TaskService {
       const allow_distance = 5000;
 
       socket.on('connect', async () => {
-        const AfterDate = (date: Date) => Between(subMinutes(date, 6), date);
+        const startDate = subMinutes(new Date(), 5).toISOString();
+        const endDate = new Date().toISOString();
+
         const bookCars = await this.bookCarService.find({
           where: {
             driver: IsNull(),
-            createdAt: AfterDate(new Date()),
+            createdAt: And(
+              Raw((alias) => `${alias} > '${startDate}'`),
+              Raw((alias) => `${alias} < '${endDate}'`),
+            ),
           },
           relations: {
             driver_cancel: true,
