@@ -62,7 +62,7 @@ export class TaskService {
         const bookCars = await this.bookCarService.find({
           where: {
             driver: null,
-            updatedAt: AfterDate(new Date()),
+            createdAt: AfterDate(new Date()),
           },
           relations: {
             driver_cancel: true,
