@@ -9,10 +9,9 @@ import {
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
-import { ENUM_MODEL, ENUM_STATUS_BOOK } from 'src/common';
+import { ENUM_MODEL } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { Connection } from 'typeorm';
-import { BookCar } from '../book-cars/entities/book-car.entity';
 import { CreateDriverCancelDto } from './dto/create-driver-cancel.dto';
 import { UpdateDriverCancelDto } from './dto/update-driver-cancel.dto';
 import { DriverCancel } from './entities/driver-cancel.entity';
@@ -132,15 +131,6 @@ export class DriverCancelService extends TypeOrmCrudService<DriverCancel> {
           driverId: req.user.id,
         })
         .orIgnore()
-        .execute();
-
-      await queryRunner.manager
-        .createQueryBuilder()
-        .update(BookCar)
-        .set({
-          status: ENUM_STATUS_BOOK.CANCELED,
-        })
-        .where('id = :id', { id })
         .execute();
 
       await queryRunner.commitTransaction();

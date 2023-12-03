@@ -8,9 +8,9 @@ import {
 } from '@nestjsx/crud';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
-import axios from 'axios';
+import { subMinutes } from 'date-fns';
 import { I18nLang } from 'nestjs-i18n';
-import { ENUM_MODEL } from 'src/common';
+import { ENUM_MODEL, ENUM_STATUS_BOOK } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection } from 'typeorm';
@@ -140,7 +140,6 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
       //     },
       //   },
       // );
-
       // from_address = res.data?.results?.[0]?.formatted_address || '';
     }
 
@@ -222,5 +221,32 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
         },
       ),
     };
+  }
+
+  async scheduleCancelBook() {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const date = new Date();
+      await queryRunner.manager
+        .createQueryBuilder()
+        .update(BookCar)
+        .set({ status: ENUM_STATUS_BOOK.CANCELED })
+        .where('driver = null')
+        .andWhere('updatedAt between :start and :end', {
+          start: subMinutes(date, 5),
+          end: date,
+        })
+        .execute();
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.checkService.throwErrorSystem(err.message);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

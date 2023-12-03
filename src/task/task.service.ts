@@ -1,12 +1,14 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { subMinutes } from 'date-fns';
 import { io } from 'socket.io-client';
 import { TicketEventType } from 'src/event/dto/event-chat.dto';
 import { BookCarsService } from 'src/modules/book-cars/book-cars.service';
 import { DriversService } from 'src/modules/drivers/drivers.service';
-import { Between } from 'typeorm';
+import { Between, In, Not } from 'typeorm';
 
 let isBookCar = false;
+let isCancelBookCar = false;
 
 @Injectable()
 export class TaskService {
@@ -37,16 +39,31 @@ export class TaskService {
   }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
+  async handleCancelBookCar() {
+    if (!isCancelBookCar) {
+      isCancelBookCar = true;
+
+      await this.bookCarService.scheduleCancelBook();
+
+      isCancelBookCar = false;
+    }
+  }
+
+  @Cron(CronExpression.EVERY_5_SECONDS)
   handleBookCar() {
     if (!isBookCar) {
+      isBookCar = true;
       const socket = io(`${process.env.HOST}:${process.env.APP_PORT}`);
       const C = 0.04;
       const allow_distance = 5000;
-      isBookCar = true;
 
       socket.on('connect', async () => {
+        const AfterDate = (date: Date) => Between(subMinutes(date, 6), date);
         const bookCars = await this.bookCarService.find({
-          where: { driver: null, status: 'FINDING' },
+          where: {
+            driver: null,
+            updatedAt: AfterDate(new Date()),
+          },
           relations: {
             driver_cancel: true,
           },
@@ -63,6 +80,7 @@ export class TaskService {
                 book.from_address_lng - C,
                 book.from_address_lng + C,
               ),
+              id: Not(In(book.driver_cancel.map((it) => it.driverId))),
             },
           });
 
