@@ -327,9 +327,12 @@ export class DriversService extends TypeOrmCrudService<Driver> {
         .update(BookCar)
         .set({
           status: ENUM_STATUS_BOOK.PICKING,
-          driverId: req.user.id,
+          driver: req.user.id,
         })
-        .where('id = :id', { id })
+        .where('id = :id and status = :status', {
+          id,
+          status: ENUM_STATUS_BOOK.FINDING,
+        })
         .execute();
 
       await queryRunner.commitTransaction();
