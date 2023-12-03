@@ -322,17 +322,27 @@ export class DriversService extends TypeOrmCrudService<Driver> {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
+      const data = await queryRunner.manager
+        .getRepository(BookCar)
+        .createQueryBuilder()
+        .setLock('pessimistic_write')
+        .where('id = :id and status = :status', {
+          id,
+          status: ENUM_STATUS_BOOK.FINDING,
+        })
+        .getMany();
+
+      if (data.length === 0) throw new Error('Đã có người nhận đơn!');
+
       await queryRunner.manager
         .createQueryBuilder()
+        .setLock('pessimistic_write')
         .update(BookCar)
         .set({
           status: ENUM_STATUS_BOOK.PICKING,
           driver: req.user.id,
         })
-        .where('id = :id and status = :status', {
-          id,
-          status: ENUM_STATUS_BOOK.FINDING,
-        })
+        .where('id = :id', { id })
         .execute();
 
       await queryRunner.commitTransaction();
