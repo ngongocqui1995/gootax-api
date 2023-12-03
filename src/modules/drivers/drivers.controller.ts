@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Put,
   Request,
@@ -210,5 +211,26 @@ export class DriversController implements CrudController<Driver> {
     @I18nLang() lang: string,
   ) {
     return this.service.emailChangePassword(req, changePasswordDTO, lang);
+  }
+
+  @Get('receive-order/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer {{token}}',
+  })
+  @ApiParam({
+    required: true,
+    name: 'id',
+    type: String,
+    example: '1',
+    description: 'Id',
+  })
+  async receiveOrder(
+    @Param('id') id: string,
+    @Request() req,
+    @I18nLang() lang: string,
+  ) {
+    return this.service.receiveOrder(id, req, lang);
   }
 }

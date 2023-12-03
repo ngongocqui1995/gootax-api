@@ -10,10 +10,11 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import to from 'await-to-js';
 import { I18nLang } from 'nestjs-i18n';
 import { PasswordHasherService } from 'src/auth/password-hasher/password-hasher.service';
-import { ENUM_MODEL } from 'src/common';
+import { ENUM_MODEL, ENUM_STATUS_BOOK } from 'src/common';
 import { BaseService } from 'src/common/base.service';
 import { UpdateStatusDTO } from 'src/common/dto/update-status.dto';
 import { Connection, Not } from 'typeorm';
+import { BookCar } from '../book-cars/entities/book-car.entity';
 import { ChangePasswordEmailDTO } from '../users/dto/change-password-email.dto';
 import { ChangePasswordDTO } from '../users/dto/change-password.dto';
 import { ChangeLocationDTO } from './dto/change-location.dto';
@@ -311,6 +312,48 @@ export class DriversService extends TypeOrmCrudService<Driver> {
       status: HttpStatus.OK,
       message: await this.checkService.i18n.translate(
         'messages.RESET_PASSWORD.PASSWORD_CHANGED',
+      ),
+    };
+  }
+
+  async receiveOrder(id: string, @Request() req, @I18nLang() lang: string) {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager
+        .createQueryBuilder()
+        .update(BookCar)
+        .set({
+          status: ENUM_STATUS_BOOK.PICKING,
+          driverId: req.user.id,
+        })
+        .where('id = :id', { id })
+        .execute();
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      this.checkService.throwErrorSystem(err.message);
+    } finally {
+      await queryRunner.release();
+    }
+
+    return {
+      status: HttpStatus.OK,
+      message: await this.checkService.i18n.translate(
+        'messages.ACTION.UPDATE',
+        {
+          lang,
+          args: [
+            {
+              name: await this.checkService.i18n.translate(
+                'models.' + this.status_name,
+              ),
+            },
+          ],
+        },
       ),
     };
   }
