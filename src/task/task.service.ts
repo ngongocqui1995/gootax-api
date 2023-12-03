@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import { TicketEventType } from 'src/event/dto/event-chat.dto';
 import { BookCarsService } from 'src/modules/book-cars/book-cars.service';
 import { DriversService } from 'src/modules/drivers/drivers.service';
-import { Between, In, Not } from 'typeorm';
+import { Between, In, IsNull, Not } from 'typeorm';
 
 let isBookCar = false;
 let isCancelBookCar = false;
@@ -61,7 +61,7 @@ export class TaskService {
         const AfterDate = (date: Date) => Between(subMinutes(date, 6), date);
         const bookCars = await this.bookCarService.find({
           where: {
-            driver: null,
+            driver: IsNull(),
             createdAt: AfterDate(new Date()),
           },
           relations: {
