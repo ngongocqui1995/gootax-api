@@ -59,7 +59,7 @@ export class TaskService {
       const allow_distance = 5000;
 
       socket.on('connect', async () => {
-        const startDate = subMinutes(new Date(), 5).toISOString();
+        const startDate = subMinutes(new Date(), 6).toISOString();
         const endDate = new Date().toISOString();
 
         const bookCars = await this.bookCarService.find({
