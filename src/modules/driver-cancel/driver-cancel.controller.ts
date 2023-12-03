@@ -1,4 +1,4 @@
-import { Controller, Param, Put, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
 import { ApiHeader, ApiParam, ApiTags } from '@nestjs/swagger';
 import {
   Crud,
@@ -95,7 +95,8 @@ export class DriverCancelController implements CrudController<DriverCancel> {
     return this.service.createOneBase(req, dto, lang);
   }
 
-  @Put('book-cancel/:id')
+  @Get('book-cancel/:id')
+  @UseGuards(JwtAuthGuard)
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer {{token}}',
