@@ -235,10 +235,7 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
         .update(BookCar)
         .set({ status: ENUM_STATUS_BOOK.CANCELED })
         .where('driver_id is null')
-        .andWhere('createdAt between :start and :end', {
-          start: subMinutes(date, 5),
-          end: date,
-        })
+        .andWhere('createdAt <= :date', { date: subMinutes(date, 5) })
         .execute();
 
       await queryRunner.commitTransaction();
