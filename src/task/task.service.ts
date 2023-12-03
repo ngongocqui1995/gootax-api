@@ -6,7 +6,7 @@ import { ENUM_STATUS_BOOK } from 'src/common';
 import { TicketEventType } from 'src/event/dto/event-chat.dto';
 import { BookCarsService } from 'src/modules/book-cars/book-cars.service';
 import { DriversService } from 'src/modules/drivers/drivers.service';
-import { And, Between, IsNull, Raw } from 'typeorm';
+import { And, Between, Raw } from 'typeorm';
 
 let isBookCar = false;
 let isCancelBookCar = false;
@@ -64,7 +64,6 @@ export class TaskService {
 
         const bookCars = await this.bookCarService.find({
           where: {
-            driver: IsNull(),
             createdAt: And(
               Raw((alias) => `${alias} > '${startDate}'`),
               Raw((alias) => `${alias} < '${endDate}'`),
