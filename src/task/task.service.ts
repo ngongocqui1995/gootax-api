@@ -2,10 +2,11 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { subMinutes } from 'date-fns';
 import { io } from 'socket.io-client';
+import { ENUM_STATUS_BOOK } from 'src/common';
 import { TicketEventType } from 'src/event/dto/event-chat.dto';
 import { BookCarsService } from 'src/modules/book-cars/book-cars.service';
 import { DriversService } from 'src/modules/drivers/drivers.service';
-import { And, Between, In, IsNull, Not, Raw } from 'typeorm';
+import { And, Between, IsNull, Raw } from 'typeorm';
 
 let isBookCar = false;
 let isCancelBookCar = false;
@@ -85,7 +86,6 @@ export class TaskService {
                 book.from_address_lng - C,
                 book.from_address_lng + C,
               ),
-              id: Not(In(book.driver_cancel.map((it) => it.driverId))),
             },
           });
 
@@ -97,12 +97,17 @@ export class TaskService {
             if (distance > allow_distance) continue;
 
             await new Promise((resolve) => {
+              const driverCancel = book.driver_cancel.map((it) => it.driverId);
+              const status = driverCancel.includes(driver.id)
+                ? ENUM_STATUS_BOOK.CANCELED
+                : book.status;
+
               socket.emit(
                 'message',
                 {
                   cmd_type: TicketEventType.MESSAGE,
                   room_id: driver.id,
-                  message: book,
+                  message: { ...book, status },
                 },
                 (value) => {
                   resolve(value);
