@@ -38,6 +38,7 @@ import { VehiclesModule } from './modules/vehicles/vehicles.module';
 import { WardsModule } from './modules/wards/wards.module';
 import { TaskModule } from './task/task.module';
 import { DriverCancelModule } from './modules/driver-cancel/driver-cancel.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -84,6 +85,7 @@ import { DriverCancelModule } from './modules/driver-cancel/driver-cancel.module
     EventModule,
     TaskModule,
     DriverCancelModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [
