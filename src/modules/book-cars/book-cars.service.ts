@@ -234,7 +234,7 @@ export class BookCarsService extends TypeOrmCrudService<BookCar> {
         .createQueryBuilder()
         .update(BookCar)
         .set({ status: ENUM_STATUS_BOOK.CANCELED })
-        .where('driver_id is null')
+        .andWhere('status = :status', { status: ENUM_STATUS_BOOK.FINDING })
         .andWhere('createdAt <= :date', {
           date: subMinutes(date, 5).toISOString(),
         })

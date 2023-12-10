@@ -6,13 +6,13 @@ export class BaseEntity {
     type: String,
     description: 'createdAt',
   })
-  @CreateDateColumn({ nullable: true })
+  @CreateDateColumn({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
   readonly createdAt: Date;
 
   @ApiProperty({
     type: String,
     description: 'updatedAt',
   })
-  @UpdateDateColumn({ nullable: true })
+  @UpdateDateColumn({ nullable: true, default: () => 'CURRENT_TIMESTAMP' })
   readonly updatedAt: Date;
 }
