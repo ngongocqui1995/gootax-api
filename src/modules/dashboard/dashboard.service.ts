@@ -92,28 +92,30 @@ export class DashboardService {
         .getRepository(BookCar)
         .createQueryBuilder('book')
         .select('sum(book.amount)', 'sum')
-        .addSelect(`"createdAt", 'Doanh số' as title`)
+        .addSelect(`TO_CHAR("createdAt"::DATE, 'dd/mm/yyyy') as createdAt`)
+        .addSelect(`'Doanh số' as title`)
         .where('status = :status', { status: ENUM_STATUS_BOOK.COMPLETED })
         .andWhere('"createdAt" between :from_date and :to_date', {
           from_date,
           to_date,
         })
-        .groupBy('"createdAt"')
-        .orderBy({ '"createdAt"': 'ASC' })
+        .groupBy('createdAt')
+        .orderBy({ createdAt: 'ASC' })
         .getRawMany();
 
       const total_order = queryRunner.manager
         .getRepository(BookCar)
         .createQueryBuilder('book')
         .select('count(book.id)', 'sum')
-        .addSelect(`"createdAt", 'Đơn hàng' as title`)
+        .addSelect(`TO_CHAR("createdAt"::DATE, 'dd/mm/yyyy') as createdAt`)
+        .addSelect(`'Đơn hàng' as title`)
         .where('status = :status', { status: ENUM_STATUS_BOOK.COMPLETED })
         .andWhere('"createdAt" between :from_date and :to_date', {
           from_date,
           to_date,
         })
-        .groupBy('"createdAt"')
-        .orderBy({ '"createdAt"': 'ASC' })
+        .groupBy('createdAt')
+        .orderBy({ createdAt: 'ASC' })
         .getRawMany();
 
       const results = (
